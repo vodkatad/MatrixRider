@@ -1,0 +1,1 @@
+setGeneric("getSeqOccupancy", def=function(pwm, subject, seqname="Unknown", min.score=0.8) { standardGeneric("getSeqOccupancy") }, valueClass="numeric")  
