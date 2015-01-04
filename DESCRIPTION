@@ -1,0 +1,9 @@
+Package: matrix_rider
+Type: Package
+Title: What the package does (short line)
+Version: 0.99.0
+Date: 2015-01-04
+Author: Elena Grassi
+Maintainer: Elena Grassi <grassi.e@gmail.com>
+Description: More about what it does (maybe more than one line)
+License: GPL-3
