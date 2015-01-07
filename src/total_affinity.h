@@ -83,6 +83,7 @@
 #define CUTOFF_FILE_ERROR 10
 #define FREQ_ZERO_ERROR 11
 
+
 #define STARTING_FASTA 50
 #define STARTING_SEQ 17
 /*are we wasting ram? */
@@ -110,7 +111,6 @@ typedef struct matrix_ll_ *matrix_ll;
 struct matrix_ll_ {
 	double **ll;
 	double **llrc;
-	double **freq;
 	int length;
 	char *name;
 };
@@ -150,17 +150,14 @@ struct run_ {
     int normalize_on_seq_len;
 };
 
-void get_matrixes(run info);  
-int find_matrix_index(run info, char *name);
-void get_fractions_from_pcounts(matrix_ll m, run info); 
+void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to)
 void free_matrixes(matrix_ll *m, int loaded);
 int alloc_matrixes(matrix_ll **m);  
 
-double matrix_little_window_tot(matrix_ll m, fasta s, int begin, run info); 
-double get_affinities_nonLog(matrix_ll m, int *s, int start);
-double get_affinities_log(matrix_ll m, int *s, int start);
-void assign_ll(matrix_ll m, double *bg, run info);
-double log2_ratio(double n, double d, run info);
+double matrix_little_window_tot(matrix_ll m, fasta s, int begin, int end); 
+double get_affinity(matrix_ll m, int *s, int start);
+//void assign_ll(matrix_ll m, double *bg, run info);
+double ratio(double n, double d, int *error);
 
 void free_fasta(run info);
 fasta load_next_fasta(run info, double *bg);
@@ -168,10 +165,7 @@ void add_count_bg(fasta f, char c, run info);
 int encode_base(char c);
 int encoded_rc(int n);
 void assign_zero_bg(fasta f); 
-void get_background_from_file(run info, double *bg);
-void assign_bg_from_file(fasta f, double *bg);
 void get_id(FILE *f, char **s, run info);
-void skip_line(FILE *f);    
 void get_seq(char *seq, int offset, int len, char *match);
 void get_rc(char *seq, int offset, int len, char *match); 
 

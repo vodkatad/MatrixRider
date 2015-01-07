@@ -31,56 +31,27 @@ SEXP get_occupancy(SEXP pwm)
    return(res);
 }
 
-void get_matrixes(run info)
+void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to)
 {
-   if (alloc_matrixes(&(info->matrixes)))
-		info->error = MEMORY_ERROR;
-	matrix_ll *matrixes = info->matrixes;
-	char name[MAX_MATRIX_NAME];
-	char old_name[MAX_MATRIX_NAME];
-	double acgt[BASES];
-	strcpy(old_name, "");
-	strcpy(name, "");
-	int length = 0;
-	int ongoing = 1;
-	int i = 0;
-	while (ongoing) {
-		if (fscanf(info->f_matrixes, "%s\t%*d\t%lf\t%lf\t%lf\t%lf\n",
-			   name, &acgt[A], &acgt[C], &acgt[G], &acgt[T]) != 5) {
-#ifdef DEBUG
-			printf("You fool fscanf!\n");
-#endif				/* DEBUG */
-			if (fgetc(info->f_matrixes) != EOF)
-				info->error = MATRIX_FILE_ERROR;
-			ongoing = 0;
-			break;	/* XXX BAD */
-		}
-		if (strcmp(name, old_name)) {	/* we have a new matrix */
-#ifdef DEBUG
-			printf("Last was %d, now adding %s\n", length, name);
-#endif				/* DEBUG */
-			if (info->n_matrixes != 0) {
-				(*matrixes)->length = length;	/* assign length to last matrix */
-				get_fractions_from_pcounts(*matrixes, info);
-				check_error(info);
-				matrixes++;	/* next matrix to be loaded */
-			}
-			info->n_matrixes++;
-			length = 0;
-			strcpy((*matrixes)->name, name);
-		}
-		for (i = 0; i < BASES; i++)
-			(*matrixes)->freq[length][i] = acgt[i];
-		length++;
-		if (info->n_matrixes >= MAX_MATRIXES
-		    || length >= MAX_MATRIX_LENGTH) {
-			ongoing = 0;
-			info->error = MATRIX_LIMIT_ERROR;
-		}
-		strcpy(old_name, name);
-	}
-	(*matrixes)->length = length;	/* assign length to last matrix */
-	get_fractions_from_pcounts(*matrixes, info);
+   int ncol = INTEGER(GET_DIM(from))[0];
+   int nrow = INTEGER(GET_DIM(from))[1];
+   if (nrow != BASES) {
+      // Error and exit badly XXX TODO
+   }
+   to->length = ncol;   
+   
+   int i = 0;
+   int j = 0;
+   // We have four rows (index j) and "matrix length" columns (index i) in SEXP from
+   // and we have a reversed structure in matrix_ll to with a row foreach matrix element with 4 numbers.
+   for (i = 0; i < ncol; i++) {
+      for (j = 0; j < BASES; j++)
+			to->ll[i][j] = REAL(mat)[j*nrow+i];
+   }
+   // are those numbers really ll already?
+   // do we need to use R_alloc and not calloc/mallocs?
+   // Do we need the matrix name here? probably not
+	// call assign cutoff! here or later? XXX TODO
 }
 
 /*
@@ -191,6 +162,49 @@ void free_matrixes(matrix_ll * m, int loaded)
 }
 
 /*
+    Function: assign_cutoff_occupancy
+
+    Assign a cutoff to a matrix_ll using the fractional cutoff 
+    in the given run - uses likelihoods and not log likelihoods.
+    The cutoff calculations are:   
+    sum (log P/Pbg) > 8/10 sum(log Pmax/Pbg)
+    2^
+    prod (P/Pbg) > prod (Pmax/Pbg)^8/10
+    
+    Parameters:
+        m - matrix_ll with ll loaded and missing cutoff.
+        info - run with cutoff informations.
+*/
+void assign_cutoff_occupancy(matrix_ll m, run info)
+{
+	int j = 0;
+	int i = 0;
+	double max_tot = 1;
+	double max;
+	for (; j < m->length; j++) {
+		max = m->ll[j][0];
+		for (i = 1; i < BASES; i++) {
+			if (m->ll[j][i] > max) {
+				max = m->ll[j][i];
+			}
+		}
+		max_tot *= max;
+	}
+
+	/* If a file with cutoffs is given we will use them, otherwise we have default
+	   or given parameters equals for every matrix. */
+	if (info->f_cutoffs) {
+		info->cutoff = m->frac_cutoff;
+		info->abs_cutoff = m->abs_cutoff;
+	}
+	if (info->cutoff == 0) 
+		m->cutoff = 0; //a^0 = 1 but with 0 we want the same results that with total affinity
+	else
+		m->cutoff = pow(max_tot, info->cutoff); 	
+}
+
+
+/*
     Function: matrix_little_window_tot
     
     Computes affinity between a matrix and a string on all viable positions and
@@ -199,28 +213,49 @@ void free_matrixes(matrix_ll * m, int loaded)
     Parameters:
     
         m   - matrix_ll matrix that will be used.
-        seq - sequence versus which matrix will be compared.
-   	s_length - the
-
-    
+        f   - fasta seq that will be used.
+        begin - starting base to compute affinity on f.
+        end - TODO XXX
     Returns:
        
-       double with total affinity between the given matrix and fasta,
-       normalized upon the number of matrix matches != 0 (i.e. without an N).
+       double with total affinity between the given matrix and fasta.
 */
-double matrix_little_window_tot(matrix_ll m, fasta f, int begin, run info)
+double matrix_little_window_tot(matrix_ll m, fasta f, int begin, int end)
 {
-	int offset = 0;
-    int *seq = f->seq;
+   int offset = 0;
+   char *seq = f->seq;
+   int l = f->length;
+	if (begin > 0){
+		if (begin > l){
+			fprintf(stderr,	"ERROR: invalid begin in matrix_little_window_tot()\n");
+			exit(1);
+		}
+		offset = begin;
+	}
+	if(end > 0){
+		if(end > l){
+			fprintf(stderr,	"ERROR: invalid end in matrix_little_window_tot()\n");
+			exit(1);
+		}
+	}else{
+		end = l;
+	}
+
 	double tot = 0;
-	while (offset <= f->length - m->length) {
-		tot += info->get_affinities_pointer(m, seq, offset);
+	(*tot_match_noN) = 0;
+	while (offset <= end - m->length) {
+		int foundN = 0;
+		//was get_affinities_nonLog
+		double match = info->get_affinity(m, seq, offset);
+		if (!info->occupancy || match >= m->cutoff) {
+			tot += match;
+		}
 		offset++;
 	}
 	return tot;
 }
 
-double get_affinities_nonLog(matrix_ll m, int *s, int start)
+double get_affinity(matrix_ll m, int *s, int start)
 {
    /* results[0] is straight total, results[1] revcomp */
    int i = 0;
@@ -236,52 +271,31 @@ double get_affinities_nonLog(matrix_ll m, int *s, int start)
 	return (results[0] > results[1]) ? results[0] : results[1];
 }
 
-double get_affinities_log(matrix_ll m, int *s, int start)
-{
-	/* results[0] is straight total, results[1] revcomp */
-	int i = 0;
-	double results[2];
-	results[0] = 0;
-	results[1] = 0;
-	while (i < m->length) {
-		results[0] += m->ll[i][s[start]];
-		results[1] += m->llrc[i][s[start]]; 
-		i++;
-		start++;
-	}
-	return (results[0] > results[1]) ? results[0] : results[1];
-}
-
-/*  Function: log2_ratio
+/*  Function: ratio
     
-    Returns the log2ratio or only the ratio (depending on info->log2),
-    sets error to 1 if the ratio is non-positive.
-    Computes log2ratio if info->log2 evaluates true, ratio otherwise.
+    Returns the the ratio between numerator and denominator.
+    Sets error to 1 if the ratio is non-positive or denominator is ~0.
     
     Parameters:
         n - double which will be used as numerator.
         d - double which will be used as denominator.
-        info - run used to set error flags and determine if log has to be applied.
+        error - pointer to set error flags.
         
     Return:
-        double which is the log2-ratio or simple ratio between n and d.
-        (will be 0 if an error occurred).
+        ratio between n and d (will be 0 if an error occurred).
 */
 
-double log2_ratio(double n, double d, run info)
+double ratio(double n, double d, int *error)
 {
+   // FIXME XXX is this the right error code?
    if (d < EPSILON) {
-   	info->error = BACKGROUND_FREQ_ERROR;
+   	*error = BACKGROUND_FREQ_ERROR;
 		return 0;
 	}
 	double ratio = n / d;
 	if (ratio <= 0) {
-		info->error = BACKGROUND_FREQ_ERROR;
+		*error = BACKGROUND_FREQ_ERROR;
 		return 0;
-	}
-	
-	if (info->log2)
-		return log(ratio) / log(2);
-	else 
-		return ratio;
+	}	
+	return ratio;
 }
