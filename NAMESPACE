@@ -1,3 +1,2 @@
 exportPattern("^[[:alpha:]]+")
-#import(TFBSTools) # in Description: Imports: TFBSTools
 useDynLib(MatrixRider, .registration = TRUE)

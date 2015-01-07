@@ -8,5 +8,6 @@ Maintainer: Elena Grassi <grassi.e@gmail.com>
 Description: More about what it does (maybe more than one line)
 License: GPL-3
 Depends: R (>= 3.0.1)
+Imports: TFBSTools
 Suggests: RUnit
 
