@@ -112,7 +112,7 @@ struct matrix_ll_ {
 	double **ll;
 	double **llrc;
 	int length;
-	char *name;
+	//char *name;
 };
 
 

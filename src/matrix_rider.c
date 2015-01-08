@@ -15,6 +15,15 @@ SEXP get_occupancy(SEXP pwm)
    matrix_ll mat_ll = NULL;
    convert_PWMMatrix_to_matrix_ll(mat, mat_ll);
    
+   //Matrix name management: does not work right now. Is it needed?
+   /*
+   Rprintf(GET_SLOT(pwm, install("ID")));
+   const char *ID = CHAR(GET_SLOT(pwm, install("ID")));
+   mat_ll->name = (char *) R_alloc(MAX_MATRIX_NAME, sizeof(char));
+   strcpy(mat_ll->name, ID);
+   Rprintf("ID %s\n",mat_ll->name);
+   */
+   
    SEXP res = PROTECT(allocVector(INTSXP,3));
    int *p = INTEGER(res);
    p[0] = 42;
@@ -42,7 +51,7 @@ void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to)
    		*cur = (double *) R_alloc(BASES+1, sizeof(double));
 			
 	}
-   to->name = (char *) R_alloc(MAX_MATRIX_NAME, sizeof(char));
+   
    // IFDEF DEBUG
    //Rprintf("ncol %d\n", ncol);
    //Rprintf("nrow %d\n", nrow);
@@ -50,9 +59,7 @@ void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to)
    // ENDIF
    
    if (nrow != BASES) {
-      Rprintf("Error: nrow of the matrix inside PWMMatrix object != 4");
-      return;
-      // Error and exit badly XXX TODO
+      error("Error: nrow of the matrix inside PWMMatrix object != 4");
    }
    to->length = ncol;   
    
@@ -77,8 +84,6 @@ void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to)
    }
    
    // are those numbers really ll already?
-   // do we need to use R_alloc and not calloc/mallocs?
-   // Do we need the matrix name here? probably not
 	// call assign cutoff! here or later? XXX TODO
 }
 
