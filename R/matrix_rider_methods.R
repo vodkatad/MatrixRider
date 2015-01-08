@@ -1,6 +1,6 @@
-setMethod("getSeqOccupancy", signature=(pwm="PWMatrix"),
-   function(pwm, subject, seqname="Unknown", min.score=0.8) {
-      c_res <- .Call("get_occupancy", pwm)
+setMethod("getSeqOccupancy", signature=c(pwm="PFMatrix", cutoff="numeric"),
+   function(pwm, cutoff) {
+      c_res <- .Call("get_occupancy", pwm, cutoff)
       print(c_res)
       return(c_res)
    }

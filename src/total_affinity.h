@@ -111,6 +111,8 @@ typedef struct matrix_ll_ *matrix_ll;
 struct matrix_ll_ {
 	double **ll;
 	double **llrc;
+   double **freq;
+   double cutoff;
 	int length;
 	//char *name;
 };
@@ -150,7 +152,10 @@ struct run_ {
     int normalize_on_seq_len;
 };
 
-void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to);
+void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
+void assign_ll(matrix_ll m, double *bg);
+void assign_cutoff_occupancy(matrix_ll m, double cutoff);
+
 void free_matrixes(matrix_ll *m, int loaded);
 int alloc_matrixes(matrix_ll **m);  
 
