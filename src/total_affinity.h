@@ -61,7 +61,7 @@
 #define MAX_FASTA_ID 10
 #define DEFAULT_COUNT 1 
 #define DEFAULT_LOG2 0 
-#define ERROR 1
+//#define ERROR 1
 #define OK 0
 #define A 0
 #define C 1
@@ -150,7 +150,7 @@ struct run_ {
     int normalize_on_seq_len;
 };
 
-void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to)
+void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll to);
 void free_matrixes(matrix_ll *m, int loaded);
 int alloc_matrixes(matrix_ll **m);  
 
