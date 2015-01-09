@@ -55,6 +55,7 @@
     DEBUG - define if you want a lot of debugging infos printed, otherwise comment the defining line.
 */
 #define BASES 4
+#define NBASES 5
 #define MAX_MATRIX_LENGTH 35
 #define MAX_MATRIX_NAME 50
 #define MAX_MATRIXES 2000
@@ -71,10 +72,13 @@
 #define NN 0
 #define EPSILON 0.001 
 #define EEEPSILON 0.0000000001 
+
+#define MATRIX_DIM_ERROR 1
+#define MATRIX_COUNT_ERROR 2
+#define BACKGROUND_FREQ_ERROR 3
+
 #define COMMAND_LINE_ERROR 1
-#define BACKGROUND_FREQ_ERROR 2
 #define MEMORY_ERROR 3
-#define MATRIX_COUNT_ERROR 4
 #define ILLEGAL_FASTA_CHAR_ERROR 5
 #define MATRIX_LIMIT_ERROR 6
 #define SHORT_FASTA_WARNING 7
@@ -117,6 +121,9 @@ struct matrix_ll_ {
 	//char *name;
 };
 
+/*struct error_ {
+   int CODE
+}*/
 
 /*
     Struct: fasta is a pointer to a struct used to store info on fastas.  
@@ -152,9 +159,10 @@ struct run_ {
     int normalize_on_seq_len;
 };
 
-void convert_PWMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
-void assign_ll(matrix_ll m, double *bg);
-void assign_cutoff_occupancy(matrix_ll m, double cutoff);
+int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
+int assign_ll(matrix_ll m, double *bg);
+int assign_cutoff_occupancy(matrix_ll m, double cutoff);
+int encoded_rc(int n);
 
 void free_matrixes(matrix_ll *m, int loaded);
 int alloc_matrixes(matrix_ll **m);  
