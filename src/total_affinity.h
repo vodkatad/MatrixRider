@@ -121,72 +121,12 @@ struct matrix_ll_ {
 	//char *name;
 };
 
-/*struct error_ {
-   int CODE
-}*/
-
-/*
-    Struct: fasta is a pointer to a struct used to store info on fastas.  
-*/
-typedef struct fas *fasta;
-
-struct fas {
-    int *seq;
-    char *id;
-    double background[BASES];
-    int length;
-    int n_portions;
-};
-
-/* 
-    Struct: run stores informations on this run.
-*/
-typedef struct run_ *run;
-
-struct run_ {
-    int counts; /* if 0 we have fractions, if 1 pseudocounts/counts */
-    int log2; /* if 1 we use log2likelihood even for total affinities mode, if 0 (default) only for ss mode. */
-    double (*get_affinities_pointer)(matrix_ll, int *, int); /* pointer to the function that get affinities */
-    FILE *f_matrixes;
-    FILE *f_fasta;
-    FILE *f_background;
-    int end_mfasta;
-    int n_fasta;
-    char *next_id;
-    matrix_ll *matrixes;
-    int n_matrixes;
-    int error;
-    int normalize_on_seq_len;
-};
-
 int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
 int assign_ll(matrix_ll m, double *bg);
 int assign_cutoff_occupancy(matrix_ll m, double cutoff);
 int encoded_rc(int n);
-double get_affinity(matrix_ll m, int *s, int start)
+double get_affinity(matrix_ll m, int *s, int start);
 double ratio(double n, double d, int *error);
-double matrix_little_window_tot(matrix_ll m, char *seq, int seq_length);
+double matrix_little_window_tot(matrix_ll m, const char *seq, int seq_length);
 
-void free_fasta(run info);
-fasta load_next_fasta(run info, double *bg);
-void add_count_bg(fasta f, char c, run info); 
-int encode_base(char c);
-int encoded_rc(int n);
-void assign_zero_bg(fasta f); 
-void get_id(FILE *f, char **s, run info);
-void get_seq(char *seq, int offset, int len, char *match);
-void get_rc(char *seq, int offset, int len, char *match); 
-
-void check_error(run info);
-int is_atofable(char *s);
-int is_atoable(char *s);
-int open_file(char *argv[], int position, FILE **to_open);
-void parse_command_line(char *argv[], int argc, run info);
-void check_parameters(run info);
-char *get_next_token(char *argv[], int argc, int next_token);
-void tidy(run info);
-int set_beginning_info(run *info);
-
-void print_fasta(fasta f);
-void print_matrixes(run info);
 #endif

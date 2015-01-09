@@ -1,6 +1,8 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <Rdefines.h>
+#include "Biostrings_interface.h"
+#include "XVector_interface.h"
 #include "total_affinity.h"
 
 SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence);
@@ -33,9 +35,20 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    }
    Rprintf("cutoff %g\n", mat_ll->cutoff);
 
-   
-   double res = matrix_little_window_tot(mat_ll, seq, seq_length);
+/*
+   typedef struct chars_holder {
+      const char *seq;
+   	int length;
+   } Chars_holder;
+*/
 
+   Chars_holder seq_c = hold_XRaw(sequence);
+   PrintValue(sequence);
+   const char *seq = R_alloc(seq_c.length, sizeof(char));
+   strcpy(seq, seq_c.seq);
+   int seq_length = seq_c.length;
+   Rprintf("seq %s %s %d\n", seq_c.seq, seq, seq_length);
+   //double affinity = matrix_little_window_tot(mat_ll, seq, seq_length);
    //Matrix name management: does not work right now. Is it needed?
    /*
    Rprintf(GET_SLOT(pwm, install("ID")));
@@ -258,12 +271,13 @@ int encoded_rc(int n)
 	return -1;
 }
 
-double matrix_little_window_tot(matrix_ll m, char *seq, int seq_length, double cutoff)
+double matrix_little_window_tot(matrix_ll m, const char *seq, int seq_length)
 {
    int offset = 0;
 	double tot = 0;
 	while (offset <= seq_length - m->length) {
-		double match = info->get_affinity(m, seq, offset);
+      // XXX we need the encoding FRom ACGT to 0123!
+		double match = get_affinity(m, seq, offset);
 		if (match >= m->cutoff) {
 			tot += match;
 		}
