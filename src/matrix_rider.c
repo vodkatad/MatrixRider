@@ -3,9 +3,9 @@
 #include <Rdefines.h>
 #include "total_affinity.h"
 
-SEXP get_occupancy(SEXP pfm, SEXP cutoff);
+SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence);
 
-SEXP get_occupancy(SEXP pfm, SEXP cutoff) 
+SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence) 
 {
    //SEXP matrix_slot = mkChar("profileMatrix\0");
    //PrintValue(matrix_slot);
@@ -32,6 +32,9 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff)
       error("Error while assigning cutoff to matrix");
    }
    Rprintf("cutoff %g\n", mat_ll->cutoff);
+
+   
+   double res = matrix_little_window_tot(mat_ll, seq, seq_length);
 
    //Matrix name management: does not work right now. Is it needed?
    /*
@@ -122,12 +125,12 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
 		tot = 0.0;
 	}
    
-   for (i = 0; i < ncol; i++) {
+   /*for (i = 0; i < ncol; i++) {
       for (j = 0; j < BASES; j++) {
          Rprintf("%g [%d,%d]",to->freq[i][j],i,j);  
       }
       Rprintf("\n");
-   }
+   }*/
    
    return OK;
    // are those numbers really ll already? No. Similar but not the same. Will start with them then decide:
@@ -158,12 +161,12 @@ int assign_ll(matrix_ll m, double *bg)
 	}
    
    // DEBUG
-   for (i = 0; i < m->length; i++) {
+   /*for (i = 0; i < m->length; i++) {
       for (j = 0; j < BASES; j++) {
          Rprintf("%g [%d,%d]",m->ll[i][j],i,j);  
       }
       Rprintf("\n");
-   }
+   }*/
    return error;   
 }
 
@@ -253,4 +256,34 @@ int encoded_rc(int n)
 			return N;
 	}
 	return -1;
+}
+
+double matrix_little_window_tot(matrix_ll m, char *seq, int seq_length, double cutoff)
+{
+   int offset = 0;
+	double tot = 0;
+	while (offset <= seq_length - m->length) {
+		double match = info->get_affinity(m, seq, offset);
+		if (match >= m->cutoff) {
+			tot += match;
+		}
+		offset++;
+	}
+	return tot;
+}
+
+double get_affinity(matrix_ll m, int *s, int start)
+{
+   /* results[0] is straight total, results[1] revcomp */
+   int i = 0;
+	double results[2];
+	results[0] = 1;
+	results[1] = 1;
+	while (i < m->length) {
+		results[0] *= m->ll[i][s[start]];
+		results[1] *= m->llrc[i][s[start]]; 
+		i++;
+		start++;
+	}
+	return (results[0] > results[1]) ? results[0] : results[1];
 }

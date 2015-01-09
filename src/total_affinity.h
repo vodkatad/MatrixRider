@@ -163,14 +163,9 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
 int assign_ll(matrix_ll m, double *bg);
 int assign_cutoff_occupancy(matrix_ll m, double cutoff);
 int encoded_rc(int n);
-
-void free_matrixes(matrix_ll *m, int loaded);
-int alloc_matrixes(matrix_ll **m);  
-
-double matrix_little_window_tot(matrix_ll m, fasta s, int begin, int end); 
-double get_affinity(matrix_ll m, int *s, int start);
-//void assign_ll(matrix_ll m, double *bg, run info);
+double get_affinity(matrix_ll m, int *s, int start)
 double ratio(double n, double d, int *error);
+double matrix_little_window_tot(matrix_ll m, char *seq, int seq_length);
 
 void free_fasta(run info);
 fasta load_next_fasta(run info, double *bg);
