@@ -97,16 +97,6 @@
 #ifndef __TOTAL_AFFINITY_H__
 #define __TOTAL_AFFINITY_H__
 
-#define strong_assert(ASSERTION) ({\
-	if ((ASSERTION)==0){\
-        	fprintf (stderr,\
-			"Assertion failed: " # ASSERTION\
-			", function %s, file %s, line %u.\n",\
-			__func__, __FILE__, __LINE__);\
-			exit(1);\
-	}\
-})
-
 /*
     Struct: matrix_ll is a pointer to a struct used to store info on matrixes. 
 */
@@ -125,8 +115,9 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
 int assign_ll(matrix_ll m, double *bg);
 int assign_cutoff_occupancy(matrix_ll m, double cutoff);
 int encoded_rc(int n);
+int encode_base(const char c);
 double get_affinity(matrix_ll m, int *s, int start);
 double ratio(double n, double d, int *error);
-double matrix_little_window_tot(matrix_ll m, const char *seq, int seq_length);
+double matrix_little_window_tot(matrix_ll m, int *seq, int seq_length);
 
 #endif

@@ -1,0 +1,8 @@
+ Error in is(object, Cl) : 
+  no slot of name "shared" for this object of class "standardGeneric" 
+
+subject is a bad name!
+
+
+e il C liscio di matrix_rider senza -n restituisce na in caso di affinity zero 
+(cutoff alti con -y -w -1)

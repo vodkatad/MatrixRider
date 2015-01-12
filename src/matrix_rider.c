@@ -35,20 +35,28 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    }
    Rprintf("cutoff %g\n", mat_ll->cutoff);
 
-/*
+   // data@femto:~$ cp /home/data/R/x86_64-pc-linux-gnu-library/3.1/S4Vectors/include/S4Vectors_defines.h /home/data/R/x86_64-pc-linux-gnu-library/3.1/Biostrings/include/
+   // WTF?
+   /*
    typedef struct chars_holder {
       const char *seq;
    	int length;
    } Chars_holder;
-*/
+   */
 
-   Chars_holder seq_c = hold_XRaw(sequence);
-   PrintValue(sequence);
-   const char *seq = R_alloc(seq_c.length, sizeof(char));
-   strcpy(seq, seq_c.seq);
-   int seq_length = seq_c.length;
-   Rprintf("seq %s %s %d\n", seq_c.seq, seq, seq_length);
-   //double affinity = matrix_little_window_tot(mat_ll, seq, seq_length);
+   Chars_holder seq_r = hold_XRaw(sequence);
+   //PrintValue(sequence);
+   int *seq_c = (int *) R_alloc(seq_r.length, sizeof(int)); // same with sample association
+   int seq_length = seq_r.length;
+   const char *c = seq_r.seq;
+   for (int i = 0; i < seq_length; i++) {
+      seq_c[i] = encode_base(DNAdecode(c[i]));
+      //Rprintf("%x(%c) ", c[i], DNAdecode(c[i]));
+   }
+   //Rprintf("\n");
+   //Rprintf("seq %s %d\n", seq_r.seq, seq_length);
+   double affinity = matrix_little_window_tot(mat_ll, seq_c, seq_length);
+   Rprintf("affinity %g\n", affinity);
    //Matrix name management: does not work right now. Is it needed?
    /*
    Rprintf(GET_SLOT(pwm, install("ID")));
@@ -162,7 +170,7 @@ int assign_ll(matrix_ll m, double *bg)
    int error = OK;
 	for (; j < m->length; j++) {
 		for (i = 0; i < BASES; i++) {
-			m->ll[j][i] = log(ratio(m->freq[j][i], bg[i], &error))/log(2);
+			m->ll[j][i] = ratio(m->freq[j][i], bg[i], &error);
 		}
       m->ll[j][N] = NN;
 	} 
@@ -174,12 +182,12 @@ int assign_ll(matrix_ll m, double *bg)
 	}
    
    // DEBUG
-   /*for (i = 0; i < m->length; i++) {
+   for (i = 0; i < m->length; i++) {
       for (j = 0; j < BASES; j++) {
          Rprintf("%g [%d,%d]",m->ll[i][j],i,j);  
       }
       Rprintf("\n");
-   }*/
+   }
    return error;   
 }
 
@@ -271,12 +279,11 @@ int encoded_rc(int n)
 	return -1;
 }
 
-double matrix_little_window_tot(matrix_ll m, const char *seq, int seq_length)
+double matrix_little_window_tot(matrix_ll m, int *seq, int seq_length)
 {
    int offset = 0;
 	double tot = 0;
 	while (offset <= seq_length - m->length) {
-      // XXX we need the encoding FRom ACGT to 0123!
 		double match = get_affinity(m, seq, offset);
 		if (match >= m->cutoff) {
 			tot += match;
@@ -300,4 +307,21 @@ double get_affinity(matrix_ll m, int *s, int start)
 		start++;
 	}
 	return (results[0] > results[1]) ? results[0] : results[1];
+}
+
+int encode_base(const char c)
+{
+   switch (c) {
+		case 'A':
+			return A;
+		case 'C':
+			return C;
+		case 'G':
+			return G;
+		case 'T':
+			return T;
+		case 'N':
+			return N;
+	}
+	return -1;
 }
