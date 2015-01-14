@@ -33,7 +33,7 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    if (assign_cutoff_occupancy(mat_ll, cutoff_c)) {
       error("Error while assigning cutoff to matrix");
    }
-   Rprintf("cutoff %g\n", mat_ll->cutoff);
+   //Rprintf("cutoff %g\n", mat_ll->cutoff);
 
    // data@femto:~$ cp /home/data/R/x86_64-pc-linux-gnu-library/3.1/S4Vectors/include/S4Vectors_defines.h /home/data/R/x86_64-pc-linux-gnu-library/3.1/Biostrings/include/
    // WTF?
@@ -57,7 +57,7 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    //Rprintf("\n");
    //Rprintf("seq %s %d\n", seq_r.seq, seq_length);
    double affinity = matrix_little_window_tot(mat_ll, seq_c, seq_length);
-   Rprintf("affinity %g\n", affinity);
+   //Rprintf("affinity %g\n", affinity);
    //Matrix name management: does not work right now. Is it needed?
    /*
    Rprintf(GET_SLOT(pwm, install("ID")));
@@ -67,13 +67,11 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    Rprintf("ID %s\n",mat_ll->name);
    */
    
-   SEXP res = PROTECT(allocVector(INTSXP,3));
-   int *p = INTEGER(res);
-   p[0] = 42;
-   p[1] = 42;
-   int i = 0;
-   int j = 2;
-   p[2] = (int)(INTEGER(mat)[i*4+j]); // access element at row i and col j (0 based)
+   //Rprintf("aff %g\n", affinity);
+   SEXP res = PROTECT(allocVector(REALSXP,1));
+   //int *p = REAL(res);
+   REAL(res)[0] = affinity;
+   //p[2] = (int)(INTEGER(mat)[i*4+j]); // access element at row i and col j (0 based)
    UNPROTECT(1);
    return res;
 }
@@ -183,12 +181,12 @@ int assign_ll(matrix_ll m, double *bg)
 	}
    
    // DEBUG
-   for (i = 0; i < m->length; i++) {
+   /*for (i = 0; i < m->length; i++) {
       for (j = 0; j < BASES; j++) {
          Rprintf("%g [%d,%d]",m->ll[i][j],i,j);  
       }
       Rprintf("\n");
-   }
+   }*/
    return error;   
 }
 
@@ -209,7 +207,7 @@ int assign_ll(matrix_ll m, double *bg)
 */
 int assign_cutoff_occupancy(matrix_ll m, double cutoff)
 {
-   Rprintf("len %d\n", m->length);
+   //Rprintf("len %d\n", m->length);
    int j = 0;
 	int i = 0;
 	double max_tot = 1;
@@ -250,14 +248,12 @@ double ratio(double n, double d, int *error)
 {
    // FIXME XXX is this the right error code?
    if (d < EPSILON) {
-      Rprintf("here\n");
       *error = BACKGROUND_FREQ_ERROR;
 		return 0;
 	}
 	double ratio = n / d;
 	if (ratio <= 0) {
-      Rprintf("here2\n");
-		*error = BACKGROUND_FREQ_ERROR;
+   	*error = BACKGROUND_FREQ_ERROR;
 		return 0;
 	}	
 	return ratio;

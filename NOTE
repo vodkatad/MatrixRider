@@ -30,26 +30,26 @@ e il C liscio di matrix_rider senza -n restituisce na in caso di affinity zero
 TODO: 
 man pages
 vignette with biocstyle
-check for other DNAstring objects
+[manage other bjects: MaskedDNAStrings or XStringViews]
 object checks and so on (in R)
 unit tests (in C and not in R would be the idea but how...?)
 multiple matrixes method
 
-setMethod("searchSeq", "PWMatrixList",
+#setMethod("searchSeq", "PWMatrixList",
 # scans a nucleotide sequence with 
 # all patterns represented stored in $matrixset;
-          function(x, subject, seqname="Unknown", 
-                   strand="*", min.score="80%"){
+#          function(x, subject, seqname="Unknown", 
+#                   strand="*", min.score="80%"){
             #pwms = lapply(Matrix(x), unitScale)
             #ans = lapply(pwms, matchPWM, subject, min.score)
-            ans_list = lapply(x, searchSeq, 
-                              subject=subject, seqname=seqname, 
-                              strand=strand, min.score=min.score)
-            ans = do.call(SiteSetList, ans_list)
+#            ans_list = lapply(x, searchSeq, 
+#                              subject=subject, seqname=seqname, 
+#                              strand=strand, min.score=min.score)
+#            ans = do.call(SiteSetList, ans_list)
             #ans = SiteSetList(ans_list)
-            return(ans)
-          }
-          )
+#            return(ans)
+#          }
+#          )
 
 
     A \code{DNAString}, \code{XStringViews} or \code{MaskedDNAString} object which will be scanned.
