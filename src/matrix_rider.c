@@ -48,8 +48,7 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    //PrintValue(sequence);
    int *seq_c = (int *) R_alloc(seq_r.length, sizeof(int)); // same with sample association
    int seq_length = seq_r.length;
-   //const char *c = seq_r.seq;
-   const char *c = seq_r.ptr;
+   const char *c = seq_r.seq;
    for (int i = 0; i < seq_length; i++) {
       seq_c[i] = encode_base(DNAdecode(c[i]));
       //Rprintf("%x(%c) ", c[i], DNAdecode(c[i]));
