@@ -58,3 +58,55 @@ For XStringViews and MaskedDNAString it does not work right now (no slot of name
 for this object of class MaskedDNAString) --> forced it to get only DNAString for now.
 
 cp /home/data/R/x86_64-pc-linux-gnu-library/3.1/S4Vectors/include/S4Vectors_defines.h /home/data/R/x86_64-pc-linux-gnu-library/3.1/Biostrings/include/
+
+
+
+data@femto:~/Dropbox/work/matrix/matrix_rider$ time ./matrix_rider -m  /rogue/molineri/bioinfotree//task/binding_sites/dataset/jaspar/20091019/core.count -f /home/data/work/matrix/prova.fa -b /home/data/work/matrix/bg > /home/data/work/matrix/cutoff0.byfastC
+
+real   0m0.040s
+user	0m0.032s
+sys	0m0.008s
+
+data@femto:~/Dropbox/work/matrix/matrix_rider$ time ./matrix_rider -w -1 -y -p 0.0 -n -m /rogue/molineri/bioinfotree//task/binding_sites/dataset/jaspar/20091019/core.count -f /home/data/work/matrix/prova.fa -b /home/data/work/matrix/bg > /home/data/work/matrix/cutoff0.byC
+
+real   0m0.056s
+user	0m0.044s
+sys	0m0.008s
+
+data@femto:~/Dropbox/work/matrix/mr_bioc/matrix_rider/inst/examples$ time ./MatrixRiderWrapper.R  -f /home/data/work/matrix/prova.fa -c 0 > /home/data/work/matrix/cutoff0.byR
+Loading required package: methods
+Warning message:
+replacing previous import by ‘graphics::plot’ when loading ‘seqLogo’ 
+Loading required package: Biostrings
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following object is masked from ‘package:stats’:
+
+    xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, as.vector, cbind, colnames,
+    do.call, duplicated, eval, evalq, Filter, Find, get, intersect,
+    is.unsorted, lapply, Map, mapply, match, mget, order, paste, pmax,
+    pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce, rep.int,
+    rownames, sapply, setdiff, sort, table, tapply, union, unique,
+    unlist, unsplit
+
+Loading required package: S4Vectors
+Loading required package: stats4
+Loading required package: IRanges
+Loading required package: XVector
+
+real   0m18.515s
+user	0m18.220s
+sys	0m0.272s

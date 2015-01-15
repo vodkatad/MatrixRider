@@ -31,7 +31,7 @@ if (is.null(opt$cutoff)) {
    stop("Missing cutoff [-c X where 0 <= x <= 1] parameter\n")
 }
 
-library(matrix_rider)
+library(MatrixRider)
 library(JASPAR2014)
 library(TFBSTools)
 
@@ -49,7 +49,7 @@ opts['matrixtype']="PFM"
 mat <- getMatrixSet(JASPAR2014, opts)
 fa <- readDNAStringSet(opt$fa)
 res<-lapply(fa, getSeqOccupancy, pfm=mat, cutoff=0)
-write.table(t(as.dataframe(res)), sep="\t", quote=FALSE)
+write.table(t(as.data.frame(res)), sep="\t", quote=FALSE)
          
 
 if (!is.null(opt$debug)) {

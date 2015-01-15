@@ -1,3 +1,4 @@
 exportPattern("^[[:alpha:]]+")
 useDynLib(MatrixRider, .registration = TRUE)
 import(methods)      # if you have it in your 'Imports:' field
+import(TFBSTools) # should be importFrom
