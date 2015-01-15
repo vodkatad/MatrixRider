@@ -58,3 +58,6 @@ For XStringViews and MaskedDNAString it does not work right now (no slot of name
 for this object of class MaskedDNAString) --> forced it to get only DNAString for now.
 
 cp /home/data/R/x86_64-pc-linux-gnu-library/3.1/S4Vectors/include/S4Vectors_defines.h /home/data/R/x86_64-pc-linux-gnu-library/3.1/Biostrings/include/
+
+
+fake commit
