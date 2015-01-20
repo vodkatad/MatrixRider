@@ -44,8 +44,10 @@ if (opt$cutoff > 1 || opt$cutoff < 0) {
 }
    
 opts<-list()
-opts['collection']="CORE"
-opts['matrixtype']="PFM"
+opts['collection']='CORE'
+opts['matrixtype']='PFM'
+opts['all_versions']=FALSE
+opts['tax_group']='vertebrates'
 mat <- getMatrixSet(JASPAR2014, opts)
 fa <- readDNAStringSet(opt$fa)
 res<-lapply(fa, getSeqOccupancy, pfm=mat, cutoff=0)
