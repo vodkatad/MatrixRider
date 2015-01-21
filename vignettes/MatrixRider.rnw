@@ -1,0 +1,27 @@
+%\VignetteIndexEntry{TODO}
+%\VignettePackage{MatrixRider}
+\documentclass{article}
+\usepackage{Sweave}
+<<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
+BiocStyle::latex()
+@
+
+\author{Elena Grassi\\
+Department of Molecular Biotechnologies and Health Sciences,\\ MBC, University of Turin, Italy\\
+\email{elena.grassi@unito.it}
+}
+\title{TODO}
+
+\date{\Biocpkg{MatrixRider} version \Sexpr{packageDescription("MatrixRider")$Version} (Last revision 2015-01-21)}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\begin{abstract}
+TODO
+\end{abstract}
+
+\section{Introduction}
+Lorem Ipsus
+\fixme{TODO}
+
+\end{document}
