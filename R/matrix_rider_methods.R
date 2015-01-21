@@ -1,8 +1,8 @@
 setMethod("getSeqOccupancy", signature=c(sequence="DNAString", pfm="PFMatrix", cutoff="numeric"),
    function(sequence, pfm, cutoff) {
-      # DNAString, XStringViews or MaskedDNAString
-      c_res <- .Call("get_occupancy", pfm, cutoff, sequence)
-      return(c_res)
+   # DNAString, XStringViews or MaskedDNAString
+   c_res <- .Call("get_occupancy", pfm, cutoff, sequence)
+   return(c_res)
    }
 )
 
