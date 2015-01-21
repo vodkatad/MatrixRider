@@ -9,6 +9,6 @@ Description: More about what it does (maybe more than one line)
 License: GPL-3
 Depends: R (>= 3.1.2)
 Imports: methods, TFBSTools, IRanges, XVector, Biostrings
-Suggests: RUnit, BiocStyle, JASPAR2014
+Suggests: RUnit, BiocGenerics, BiocStyle, JASPAR2014
 LinkingTo: IRanges, XVector, Biostrings, S4Vectors
 
