@@ -3,33 +3,40 @@
    \alias{getSeqOccupancy-methods}
    \alias{getSeqOccupancy,DNAString,PFMatrix,numeric-method}
    \alias{getSeqOccupancy,DNAString,PFMatrixList,numeric-method}
-   \title{TODO}
+   \title{Computes the total affinity or the occupancy at a given cutoff}
    \description{
-       TODO
+       The affinity/occupancy is calculated on the given DNAString for the given PFMatrix (or all the ones in the PFMatrix list given).
       }
    \usage{
       getSeqOccupancy(sequence, pfm, cutoff)
    }
    \arguments{
       \item{sequence}{
-          A \linkS4class{DNAString} object TODO
+          A \linkS4class{DNAString} object with the sequence for which affinity will be computed.
          }
       \item{pfm}{
-         A \linkS4class{PFMatrix} or a \linkS4class{PFMatrixList} object TODO
+         A \linkS4class{PFMatrix} or a \linkS4class{PFMatrixList} object with the matrixes whose affinity will be calculated.
+         The background (\link{bg,XMatrix-method}) of the given pfm is used to perform affinity calculations.
          }
       \item{cutoff}{
-         TODO
+         Has to be between 0 and 1 (included): 0 corresponds to total affinity (i.e. summing all the affinites) while 1 to 
+         summing only values corresponding to the perfect match for a given \linkS4class{PFMatrix}. The vignette has more details 
+         on how scores are calculated. %howtolink vignette?
          }
       }
    \value{
-      TODO
+      The resulting total affinity calculated on the given fasta. 
+      If a \linkS4class{PFMatrixList} has been passed then a named numeric vector with the affinities for all the PFMs.
+      The vignette has all the details on the calculations (such as PFM to PWM conversion and pseudocounts).
    }
    \examples{
       library(JASPAR2014)
       library(TFBSTools)
       library(Biostrings)
       pfm <- getMatrixByID(JASPAR2014,"MA0004.1")
-      sequence <- DNAString("GAATTCTCTCTTGCACGTGTAGTCTCTTGACAAAATG")
+      ## The following sequence has a single perfect match thus it gives the same results with all cutoff values
+      sequence <- DNAString("CACGTG")
       getSeqOccupancy(sequence, pfm, 0.1)
+      getSeqOccupancy(sequence, pfm, 1)
    }
 \keyword{getSeqOccupancy}
