@@ -51,7 +51,7 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    const char *c = seq_r.seq;
    for (int i = 0; i < seq_length; i++) {
       seq_c[i] = encode_base(DNAdecode(c[i]));
-      //Rprintf("%x(%c) ", c[i], DNAdecode(c[i]));
+      //Rprintf("%d: %x(%c)\n", seq_c[i], c[i], DNAdecode(c[i]));
    }
    //Rprintf("\n");
    //Rprintf("seq %s %d\n", seq_r.seq, seq_length);
@@ -319,5 +319,6 @@ int encode_base(const char c)
 		case 'N':
 			return N;
 	}
+   error("Wrong argument to getSeqOccupancy, 'sequence' must be based on a restricted alphabet with only 'A','C','G','T' and 'N'");
 	return -1;
 }
