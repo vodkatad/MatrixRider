@@ -1,6 +1,6 @@
 #exportPattern("^[[:alpha:]]+")
 exportMethods(getSeqOccupancy)
-useDynLib(MatrixRider, .registration = TRUE)
+useDynLib(MatrixRider)
 import(methods)      
 importFrom(TFBSTools, PFMatrix, PFMatrixList)
 importFrom(Biostrings, DNAString)
