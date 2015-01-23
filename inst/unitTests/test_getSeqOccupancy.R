@@ -1,6 +1,6 @@
 # library(RUnit)
 # source('inst/unitTests/test_getSeqOccupancy.R')
-# test_getSeqOccupancy()
+
 
 # I do not like that much to depend on JASPAR2014, maybe in the future build ad hoc matrixes to have more robust/reliable tests.
 test_getSeqOccupancy_singlePWM_manyCutoffs <- function() {
@@ -137,4 +137,39 @@ test_getSeqOccupancy_manyPWM_totAff <- function() {
                                                         "MA0598.1", "MA0599.1", "MA0600.1", "MA0113.2"))
    
       checkEqualsNumeric(given, wanted, tolerance=1e-5)   
+}
+
+# Trivial error-exception checking.
+test_getSeqOccupancy_badCutoff <- function() {
+   library(TFBSTools)
+   library(Biostrings)
+   pfm <- PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                   strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                   tags=list(), profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                                                       16L, 0L,  20L, 0L,  0L,  0L,
+                                                       0L,  1L,  0L,  20L, 0L,  20L,
+                                                       0L,  0L,  0L,  0L,  20L, 0L),
+                                                     byrow=TRUE, nrow=4, 
+                                                     dimnames=list(c("A", "C", "G", "T"))))
+   sequence <- DNAString("CACGTG")
+   obs <- tryCatch(getSeqOccupancy(sequence=sequence, pfm, 10), error=function(e) e)
+   checkEquals(obs$message, "Wrong argument to getSeqOccupancy, 'cutoff' has to be between 0 and 1! (0 <= cutoff <= 1)")
+}
+
+# This is a test on C code but as long as it's strictly dependent on the user's usage of getSeqOccupancy it could be put
+# here even if it's not an UnitTest strictly speaking but an interaction one.
+test_getSeqOccupancy_badDNAString <- function() {
+   library(TFBSTools)
+   library(Biostrings)
+   pfm <- PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                   strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                   tags=list(), profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                                                       16L, 0L,  20L, 0L,  0L,  0L,
+                                                       0L,  1L,  0L,  20L, 0L,  20L,
+                                                       0L,  0L,  0L,  0L,  20L, 0L),
+                                                     byrow=TRUE, nrow=4, 
+                                                     dimnames=list(c("A", "C", "G", "T"))))
+   sequence <- DNAString("CACSTG")
+   obs <- tryCatch(getSeqOccupancy(sequence=sequence, pfm, 1), error=function(e) e)
+   checkEquals(obs$message, "Wrong argument to getSeqOccupancy, 'sequence' must be based on a restricted alphabet with only 'A','C','G','T' and 'N'")
 }

@@ -30,7 +30,8 @@ Elena Grassi <elena.grassi@unito.it>
       library(TFBSTools)
       library(Biostrings)
       pfm <- getMatrixByID(JASPAR2014,"MA0004.1")
-      ## The following sequence has a single perfect match thus it gives the same results with all cutoff values
+      ## The following sequence has a single perfect match 
+      ## thus it gives the same results with all cutoff values
       sequence <- DNAString("CACGTG")
       getSeqOccupancy(sequence, pfm, 0.1)
       getSeqOccupancy(sequence, pfm, 1)
