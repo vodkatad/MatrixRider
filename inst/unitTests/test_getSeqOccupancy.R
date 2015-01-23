@@ -15,6 +15,25 @@ test_getSeqOccupancy_singlePWM_manyCutoffs <- function() {
    checkEqualsNumeric(given, wanted, tolerance=1e-5)
 }
 
+# More "standalone" tests that does not depend on JASPAR2014.
+test_getSeqOccupancy_singlePWM_manyCutoffs_manualMat <- function() {
+   library(TFBSTools)
+   library(Biostrings)
+   pfm <- PFMatrix(ID="Unknown", name="Unknown", matrixClass="Unknown",
+                   strand="*", bg=c(A=0.25, C=0.25, G=0.25, T=0.25),
+                   tags=list(), profileMatrix=matrix(c(4L,  19L, 0L,  0L,  0L,  0L,
+                                                       16L, 0L,  20L, 0L,  0L,  0L,
+                                                       0L,  1L,  0L,  20L, 0L,  20L,
+                                                       0L,  0L,  0L,  0L,  20L, 0L),
+                                                       byrow=TRUE, nrow=4, 
+                                                       dimnames=list(c("A", "C", "G", "T"))))
+   sequence <- DNAString("CACGTG")
+   cutoffs <- seq(0,1,0.1)
+   given <- vapply(cutoffs, FUN=function(x) {getSeqOccupancy(sequence=sequence, pfm=pfm, cutoff=x)}, FUN.VALUE=1)
+   wanted <- rep(1470.946,11)
+   checkEqualsNumeric(given, wanted, tolerance=1e-5)
+}
+
 # is there a way to load the needed packages only once? Maybe they could be but in runTests.R?
 test_getSeqOccupancy_manyPWM_totAff <- function() {
    library(JASPAR2014)
