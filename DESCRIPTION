@@ -1,6 +1,6 @@
 Package: MatrixRider
 Type: Package
-Title: Calculate total affinity and occupancies for binding site matrices on a given sequence
+Title: Obtain total affinity and occupancies for binding site matrices on a given sequence
 Version: 0.99.0
 Date: 2015-01-04
 Author: Elena Grassi

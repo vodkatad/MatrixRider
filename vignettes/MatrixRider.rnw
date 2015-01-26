@@ -10,18 +10,96 @@ BiocStyle::latex()
 Department of Molecular Biotechnologies and Health Sciences,\\ MBC, University of Turin, Italy\\
 \email{elena.grassi@unito.it}
 }
-\title{TODO}
+\title{Obtain total affinity and occupancies for binding site matrices on a given sequence}
 
 \date{\Biocpkg{MatrixRider} version \Sexpr{packageDescription("MatrixRider")$Version} (Last revision 2015-01-21)}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
 \begin{abstract}
-TODO
+\fixme{TODO rephrase}
+Transcription factors regulate gene expression by binding regulatory
+DNA. 
+Understanding the rules governing such binding is an essential
+step in describing the network of regulatory interactions, and its
+pathological alterations. 
+
+This package implements a method that represent an
+alternative to classical single site analysis by summing all the
+single subsequence affinity contributions of a whole sequence, offering
+a method that is more in line with the thermodynamic nature of the TF-DNA
+binding.
 \end{abstract}
 
 \section{Introduction}
-Lorem Ipsus
-\fixme{TODO}
 
+The first step in understanding transcriptional regulation consists
+therefore in predicting the DNA sequences to which a TF is able
+to bind, so as to identify its targets. Most TFs bind sequences that
+are relatively short and degenerate, making this prediction quite
+challenging. The degeneracy of the binding sites is reflected in the
+use of a Positional Weight Matrix (PWM) to describe the binding
+preferences of a TF. A PWM specifies the frequency distribution of
+the 4 nucleotides in each position of a binding site, and is typically
+used to assign a score to each DNA sequence. Roughly speaking
+the score expresses the degree of similarity between the observed
+sequence and the PWM. A sequence is then predicted to be a
+transcription factor binding site (TFBS) if it scores above a given
+cutoff.
+
+The introduction of a cutoff is unsatisfactory not only because it
+introduces an arbitrary parameter, but also and especially because
+recent detailed investigations of transcription factor binding have
+shown it to be a thermodynamic process in which transient binding
+to low-affinity sequences plays an important role. In this view the
+concept itself of a binary distinction between binding and non-binding sites comes into question: it becomes more appropriate
+to consider the total binding affinity (TBA) of a sequence taking
+contributions from both high- and low-affinity sites~\cite{Tanay2006}.
+
+The thermodynamic interpretation is not the only one that suggests
+the relevance of low affinity binding sites: a recent paper~\cite{He2011}
+showed that, even hypothesising that a few high affinity sites yield the same
+result at the expression level as a fairly good number of low affinity ones, genotypes
+with many low affinity binding sites would have an ``evolutionary advantage'' (obviously not
+in the strict sense that implies a higher fitness)
+just because they are more common in the landscape of all possible occurring sequences.
+
+This approach was indeed pioneered and applied to transcriptional
+regulation in yeast by the Bussemaker lab \cite{Foat2006, Bussemaker2008}.
+Recently we used total binding
+affinity profiles to study the evolution of cis-regulatory regions in
+humans \cite{Molineris2011}. Here we undertake a systematic
+comparison of the predictive power of total binding affinity vs.
+cutoff-based methods applied to a large collection of ChIP-seq
+datasets obtained in human cells for many TFs. We find that for
+the overwhelming majority of TFs the highest predictive power is
+obtained when no cutoff is used and sites of any affinity are allowed
+to contribute to the total binding affinity of a sequence.
+
+
+\section{Looking for binding potential for a single TF on a sequence}
+
+<<ObtainSinglePFMGetSeqOccupancy>>=
+   library(MatrixRider)
+   library(JASPAR2014)
+   library(TFBSTools)
+   library(Biostrings)
+   pfm <- getMatrixByID(JASPAR2014,"MA0004.1")
+   ## The following sequence has a single perfect match 
+   ## thus it gives the same results with all cutoff values
+   sequence <- DNAString("CACGTG")
+   getSeqOccupancy(sequence, pfm, 0.1)
+   getSeqOccupancy(sequence, pfm, 1)
+@
+
+\section{Working with multiple matrixes}
+
+<<ObtainMultiplePFMGetSeqOccupancy>>=
+   pfm2 <- getMatrixByID(JASPAR2014,"MA0005.1")
+   pfms <- PFMatrixList(pfm, pfm2)
+   ## This calculates total affinity for both the PFMatrixes.
+   getSeqOccupancy(sequence, pfms, 0)
+@
+
+\bibliography{biblio} % bib in the same dir as .Rnw
 \end{document}
