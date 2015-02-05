@@ -173,3 +173,8 @@ test_getSeqOccupancy_badDNAString <- function() {
    obs <- tryCatch(getSeqOccupancy(sequence=sequence, pfm, 1), error=function(e) e)
    checkEquals(obs$message, "Wrong argument to getSeqOccupancy, 'sequence' must be based on a restricted alphabet with only 'A','C','G','T' and 'N'")
 }
+
+test_Ccode_altogether <- function() {
+   res <- .Call("run_tests")
+   checkEqualsNumeric(res, 0);
+}

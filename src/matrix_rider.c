@@ -319,3 +319,15 @@ int encode_base(const char c)
    error("Wrong argument to getSeqOccupancy, 'sequence' must be based on a restricted alphabet with only 'A','C','G','T' and 'N'");
 	return -1;
 }
+
+SEXP run_tests(void);
+
+SEXP run_tests(void) 
+{
+   int n_failedTests = RunAllTests();
+   SEXP res = PROTECT(allocVector(INTSXP,1));
+   INTEGER(res)[0] = n_failedTests;
+   UNPROTECT(1);
+   return res;
+}
+
