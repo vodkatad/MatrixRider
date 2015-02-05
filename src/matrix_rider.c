@@ -107,51 +107,19 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
       return(MATRIX_DIM_ERROR);
    }
    to->length = ncol;   
-   
-   int i = 0;
-   int j = 0;
+
    // We have four rows (index j) and "matrix length" columns (index i) in SEXP from
    // and we have a reversed structure in matrix_ll to with a row foreach matrix element with 4 numbers.
    // That's not true the matrix seems to be already reversed in memory? 
    // Are stored as: first column / then second column etc etc
-   for (j = 0; j < ncol; j++) {
-      for (i = 0; i < BASES; i++) {
+   for (int j = 0; j < ncol; j++) {
+      for (int i = 0; i < BASES; i++) {
          to->freq[j][i] = (double) (INTEGER(from)[j*BASES+i]);
          //Rprintf("girato %d %d %d %g \n", i, j, j*BASES+i, REAL(from)[j*BASES+i]);
       }
    }
    
-   // maybe factorize as it was in a separate function?
-   double tot = 0.0;
-	for (j = 0; j < to->length; j++) {
-		for (i = 0; i < BASES; i++) {
-			int val = (int)to->freq[j][i];
-			if (val != to->freq[j][i]) {	//then it's not an integer
-				return MATRIX_COUNT_ERROR;
-			}
-			if (to->freq[j][i] <= EEEPSILON) {
-				to->freq[j][i] = 1;
-			}
-			tot += to->freq[j][i];
-		}
-		
-		if (!tot) {
-			return MATRIX_COUNT_ERROR;
-		}
-		for (i = 0; i < BASES; i++) {
-			to->freq[j][i] = to->freq[j][i] / tot;
-		}
-		tot = 0.0;
-	}
-   
-   /*for (i = 0; i < ncol; i++) {
-      for (j = 0; j < BASES; j++) {
-         Rprintf("%g [%d,%d]",to->freq[i][j],i,j);  
-      }
-      Rprintf("\n");
-   }*/
-   
-   return OK;
+   return(from_counts_to_ll(to));
    // are those numbers really ll already? No. Similar but not the same. Will start with them then decide:
    // p.20 (or 30) of the manual and a gnumeric with counts for a sample matrix.
    // could be ok to develop a toPWM that does what we do (pseudocounts only on 0 and log2(pwm/bg)).
@@ -160,6 +128,35 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
    
    // stupid! We need to start from the pfm, get the bg and obtain the ll ourselves!
 }
+
+
+int from_counts_to_ll(matrix_ll m)
+{
+   // maybe factorize as it was in a separate function?
+   double tot = 0.0;
+   for (int j = 0; j < m->length; j++) {
+		for (int i = 0; i < BASES; i++) {
+			int val = (int)m->freq[j][i];
+			if (val != m->freq[j][i]) {	//then it's not an integer
+				return MATRIX_COUNT_ERROR;
+			}
+			if (m->freq[j][i] <= EEEPSILON) {
+				m->freq[j][i] = 1;
+			}
+			tot += m->freq[j][i];
+		}
+		
+		if (!tot) {
+			return MATRIX_COUNT_ERROR;
+		}
+		for (int i = 0; i < BASES; i++) {
+			m->freq[j][i] = m->freq[j][i] / tot;
+		}
+		tot = 0.0;
+	}
+   return OK;
+}
+
 
 int assign_ll(matrix_ll m, double *bg)
 {
