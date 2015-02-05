@@ -64,6 +64,12 @@ struct matrix_ll_ {
 	//char *name;
 };
 
+
+/* R entry points: */
+SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence);
+SEXP run_tests();
+
+/* Internal C functions: */
 int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr);
 int from_counts_to_ll(matrix_ll m);
 int assign_ll(matrix_ll m, double *bg);

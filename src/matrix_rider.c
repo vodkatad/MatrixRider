@@ -5,8 +5,6 @@
 #include "XVector_interface.h"
 #include "total_affinity.h"
 
-SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence);
-
 SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence) 
 {
    //SEXP matrix_slot = mkChar("profileMatrix\0");
@@ -320,9 +318,7 @@ int encode_base(const char c)
 	return -1;
 }
 
-SEXP run_tests(void);
-
-SEXP run_tests(void) 
+SEXP run_tests() 
 {
    int n_failedTests = RunAllTests();
    SEXP res = PROTECT(allocVector(INTSXP,1));
