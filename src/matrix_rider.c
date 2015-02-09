@@ -143,10 +143,6 @@ int from_counts_to_ll(matrix_ll m)
 			}
 			tot += m->freq[j][i];
 		}
-		
-		if (!tot) {
-			return MATRIX_COUNT_ERROR;
-		}
 		for (int i = 0; i < BASES; i++) {
 			m->freq[j][i] = m->freq[j][i] / tot;
 		}
@@ -320,7 +316,7 @@ int encode_base(const char c)
 
 SEXP run_tests() 
 {
-   int n_failedTests = RunAllTests();
+   int n_failedTests = runAllTests();
    SEXP res = PROTECT(allocVector(INTSXP,1));
    INTEGER(res)[0] = n_failedTests;
    UNPROTECT(1);

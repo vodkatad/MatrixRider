@@ -6,8 +6,8 @@
 #include "CuTest.h"
 #include "total_affinity.h"
 
-/* ration, encodedrc and encode_base are really simple. Do we need unit tests for them? */
-/* convert_PFMMatrix_to_matrix_ll has a SEXP parameter, cannot easily test from pure C */
+/* ration, encodedrc and encode_base are really simple. Unit tests will be the last one to be added. */
+/* convert_PFMMatrix_to_matrix_ll has a SEXP parameter, cannot easily test from pure C. Add a standard R test? */
 
 matrix_ll alloc_matrix(int ncol, int nrow)
 {
@@ -29,7 +29,7 @@ matrix_ll alloc_matrix(int ncol, int nrow)
    return(to);
 }
 
-void Test_from_counts_to_ll(CuTest *tc) {
+void test_from_counts_to_ll(CuTest *tc) {
    int ncol = 5;
    matrix_ll toTest = alloc_matrix(ncol,BASES);
    toTest->length = ncol;   
@@ -81,7 +81,7 @@ void Test_from_counts_to_ll(CuTest *tc) {
 }
 
 
-void Test_from_counts_to_ll_errorNotInt(CuTest *tc) {
+void test_from_counts_to_ll_errorNotInt(CuTest *tc) {
    int ncol = 1;
    matrix_ll toTest = alloc_matrix(ncol,BASES);
    toTest->length = ncol;   
@@ -93,20 +93,18 @@ void Test_from_counts_to_ll_errorNotInt(CuTest *tc) {
    CuAssertIntEquals(tc, res, MATRIX_COUNT_ERROR);
 }
     
-/*TODO MATRIX_COUNT_ERROR error if a single row total is 0.*/
-    
 CuSuite* MatrixRiderGetSuite();   
 
 CuSuite* MatrixRiderGetSuite() {
   CuSuite* suite = CuSuiteNew();
-  SUITE_ADD_TEST(suite, Test_from_counts_to_ll);
-  SUITE_ADD_TEST(suite, Test_from_counts_to_ll_errorNotInt);
+  SUITE_ADD_TEST(suite, test_from_counts_to_ll);
+  SUITE_ADD_TEST(suite, test_from_counts_to_ll_errorNotInt);
   return suite;
 }
 
-int RunAllTests();
+int runAllTests();
  
-int RunAllTests() {
+int runAllTests() {
   CuString *output = CuStringNew();
   CuSuite* suite = CuSuiteNew();
   CuSuiteAddSuite(suite, MatrixRiderGetSuite());
