@@ -173,10 +173,11 @@ int assign_ll(matrix_ll m, double *bg)
    // DEBUG
    /*for (i = 0; i < m->length; i++) {
       for (j = 0; j < BASES; j++) {
-         Rprintf("%g [%d,%d]",m->ll[i][j],i,j);  
+         Rprintf("%g [%d,%d]",m->llrc[i][j],i,j);  
       }
       Rprintf("\n");
    }*/
+   
    return error;   
 }
 
