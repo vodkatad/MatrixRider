@@ -7,18 +7,14 @@
 
 SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence) 
 {
-   //SEXP matrix_slot = mkChar("profileMatrix\0");
-   //PrintValue(matrix_slot);
-   
    // Getting bg.
    SEXP bg = GET_SLOT(pfm, install("bg"));
-   // XXX check on length
+   // Do we need a check on length? XXX
    double *bg_c = (double *) R_alloc(BASES, sizeof(double));
    for (int i = 0; i < BASES; i++) {
       bg_c[i] = REAL(bg)[i];
    } 
    
-   // SEXP dim = GET_DIM(pwm); // --> this is NULL for my pwm. Why?
    SEXP mat = GET_SLOT(pfm, install("profileMatrix"));
    matrix_ll mat_ll = NULL;
    if (convert_PFMMatrix_to_matrix_ll(mat, &mat_ll)) {
@@ -31,20 +27,9 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    if (assign_cutoff_occupancy(mat_ll, cutoff_c)) {
       error("Error while assigning cutoff to matrix");
    }
-   //Rprintf("cutoff %g\n", mat_ll->cutoff);
-
-   // data@femto:~$ cp /home/data/R/x86_64-pc-linux-gnu-library/3.1/S4Vectors/include/S4Vectors_defines.h /home/data/R/x86_64-pc-linux-gnu-library/3.1/Biostrings/include/
-   // WTF?
-   /*
-   typedef struct chars_holder {
-      const char *seq;
-   	int length;
-   } Chars_holder;
-   */
-
+   
    Chars_holder seq_r = hold_XRaw(sequence);
-   //PrintValue(sequence);
-   int *seq_c = (int *) R_alloc(seq_r.length, sizeof(int)); // same with sample association
+   int *seq_c = (int *) R_alloc(seq_r.length, sizeof(int)); 
    int seq_length = seq_r.length;
    const char *c = seq_r.seq;
    for (int i = 0; i < seq_length; i++) {
@@ -54,21 +39,9 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    //Rprintf("\n");
    //Rprintf("seq %s %d\n", seq_r.seq, seq_length);
    double affinity = matrix_little_window_tot(mat_ll, seq_c, seq_length);
-   //Rprintf("affinity %g\n", affinity);
-   //Matrix name management: does not work right now. Is it needed?
-   /*
-   Rprintf(GET_SLOT(pwm, install("ID")));
-   const char *ID = CHAR(GET_SLOT(pwm, install("ID")));
-   mat_ll->name = (char *) R_alloc(MAX_MATRIX_NAME, sizeof(char));
-   strcpy(mat_ll->name, ID);
-   Rprintf("ID %s\n",mat_ll->name);
-   */
    
-   //Rprintf("aff %g\n", affinity);
    SEXP res = PROTECT(allocVector(REALSXP,1));
-   //int *p = REAL(res);
    REAL(res)[0] = affinity;
-   //p[2] = (int)(INTEGER(mat)[i*4+j]); // access element at row i and col j (0 based)
    UNPROTECT(1);
    return res;
 }
@@ -95,11 +68,6 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
       	*cur = (double *) R_alloc(NBASES, sizeof(double));
 			
 	}
-   // IFDEF DEBUG
-   //Rprintf("ncol %d\n", ncol);
-   //Rprintf("nrow %d\n", nrow);
-   //PrintValue(from);
-   // ENDIF
    
    if (nrow != BASES) {
       return(MATRIX_DIM_ERROR);
@@ -113,24 +81,16 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
    for (int j = 0; j < ncol; j++) {
       for (int i = 0; i < BASES; i++) {
          to->freq[j][i] = (double) (INTEGER(from)[j*BASES+i]);
-         //Rprintf("girato %d %d %d %g \n", i, j, j*BASES+i, REAL(from)[j*BASES+i]);
       }
    }
    
    return(from_counts_to_ll(to));
-   // are those numbers really ll already? No. Similar but not the same. Will start with them then decide:
-   // p.20 (or 30) of the manual and a gnumeric with counts for a sample matrix.
-   // could be ok to develop a toPWM that does what we do (pseudocounts only on 0 and log2(pwm/bg)).
-   
-	// call assign cutoff! here or later? XXX TODO
-   
-   // stupid! We need to start from the pfm, get the bg and obtain the ll ourselves!
+   // XXX Reason about using ll calculations different from ours (like TFBSTools): accept PWMMatrix?
 }
 
 
 int from_counts_to_ll(matrix_ll m)
 {
-   // maybe factorize as it was in a separate function?
    double tot = 0.0;
    for (int j = 0; j < m->length; j++) {
 		for (int i = 0; i < BASES; i++) {
@@ -194,11 +154,10 @@ int assign_ll(matrix_ll m, double *bg)
     
     Parameters:
         m - matrix_ll with ll loaded and missing cutoff.
-        cutoff - TODO
+        cutoff - the cutoff under which single position affinities will not be considered.
 */
 int assign_cutoff_occupancy(matrix_ll m, double cutoff)
 {
-   //Rprintf("len %d\n", m->length);
    int j = 0;
 	int i = 0;
 	double max_tot = 1;
