@@ -31,7 +31,7 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
    Chars_holder seq_r = hold_XRaw(sequence);
    int *seq_c = (int *) R_alloc(seq_r.length, sizeof(int)); 
    int seq_length = seq_r.length;
-   const char *c = seq_r.seq;
+   const char *c = seq_r.ptr;
    for (int i = 0; i < seq_length; i++) {
       seq_c[i] = encode_base(DNAdecode(c[i]));
       //Rprintf("%d: %x(%c)\n", seq_c[i], c[i], DNAdecode(c[i]));
