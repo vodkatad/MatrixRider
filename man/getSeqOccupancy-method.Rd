@@ -42,6 +42,7 @@
       
       pfm2 <- getMatrixByID(JASPAR2014,"MA0005.1")
       pfms <- PFMatrixList(pfm, pfm2)
+      names(pfms) <- c(name(pfm), name(pfm2))
       ## This calculates total affinity for both the PFMatrixes.
       getSeqOccupancy(sequence, pfms, 0)
    }
