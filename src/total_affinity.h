@@ -79,5 +79,6 @@ int encode_base(const char c);
 double get_affinity(matrix_ll m, int *s, int start);
 double ratio(double n, double d, int *error);
 double matrix_little_window_tot(matrix_ll m, int *seq, int seq_length);
+int runAllTests();
 
 #endif

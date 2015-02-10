@@ -262,8 +262,6 @@ CuSuite* MatrixRiderGetSuite() {
   SUITE_ADD_TEST(suite, test_matrix_little_window_tot);
   return suite;
 }
-
-int runAllTests();
  
 int runAllTests() {
   CuString *output = CuStringNew();
