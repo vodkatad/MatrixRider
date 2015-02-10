@@ -1,14 +1,15 @@
 Package: MatrixRider
 Type: Package
-Title: What the package does (short line)
+Title: Obtain total affinity and occupancies for binding site matrices on a given sequence
 Version: 0.99.0
 Date: 2015-01-04
 Author: Elena Grassi
 Maintainer: Elena Grassi <grassi.e@gmail.com>
-Description: More about what it does (maybe more than one line)
+Description: Calculates a single number for a whole sequence that reflects the propensity of a DNA binding protein to interact with it. The DNA binding protein has to be described with a PFM matrix, for example gotten from Jaspar.
+biocViews: GeneRegulation, Genetics, MotifAnnotation
 License: GPL-3
-Depends: R (>= 3.0.1)
+Depends: R (>= 3.1.2)
 Imports: methods, TFBSTools, IRanges, XVector, Biostrings
-Suggests: RUnit
+Suggests: RUnit, BiocGenerics, BiocStyle, JASPAR2014
 LinkingTo: IRanges, XVector, Biostrings, S4Vectors
 
