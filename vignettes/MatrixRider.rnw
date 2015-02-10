@@ -28,8 +28,8 @@ pathological alterations.
 
 This package implements a method that represents an
 alternative to classical single site analysis by summing all the
-single subsequence affinity contributions of a whole sequence, offering
-a method that is more in line with the thermodynamic nature of the TF-DNA
+single subsequence affinity contributions of a whole sequence, representing
+an approach that is more in line with the thermodynamic nature of the TF-DNA
 binding.
 \end{abstract}
 
@@ -119,8 +119,10 @@ given matrixes. It will retain the names of the \Rclass{PFMMatrixList}.
    getSeqOccupancy(sequence, pfms, 0)
 @
 
-In the examples of the package we have given a simple R script that calculates affinities for all the Vertebrates
-matrixes found in \Biocpkg{JASPAR2014} for a given multifasta file.
+In the examples of the package you can find a simple R script that calculates affinities for all the Vertebrates
+matrixes found in \Biocpkg{JASPAR2014} for a given multifasta file. It is also possible to use manually
+made (i.e. derived from other databases different than Jaspar) matrixes: one simply needs to build a \Rclass{PFMMatrix}
+object with the desidered counts (need to be integer values) and the background frequencies.
 
 \section{Appendix A}\label{AppendixA}
 
