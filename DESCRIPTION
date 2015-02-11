@@ -1,7 +1,7 @@
 Package: MatrixRider
 Type: Package
 Title: Obtain total affinity and occupancies for binding site matrices on a given sequence
-Version: 0.99.0
+Version: 0.99.1
 Date: 2015-01-04
 Author: Elena Grassi
 Maintainer: Elena Grassi <grassi.e@gmail.com>
@@ -12,4 +12,3 @@ Depends: R (>= 3.1.2)
 Imports: methods, TFBSTools, IRanges, XVector, Biostrings
 Suggests: RUnit, BiocGenerics, BiocStyle, JASPAR2014
 LinkingTo: IRanges, XVector, Biostrings, S4Vectors
-

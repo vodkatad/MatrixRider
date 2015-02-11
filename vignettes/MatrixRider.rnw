@@ -10,7 +10,7 @@ BiocStyle::latex()
 
 \author{Elena Grassi\\
 Department of Molecular Biotechnologies and Health Sciences\\ MBC, University of Turin, Italy\\
-\email{elena.grassi@unito.it}
+\email{grassi.e@gmail.com}
 }
 \bioctitle[Matrix Rider]{Obtain total affinity and occupancies for binding site matrices on a given sequence}
 

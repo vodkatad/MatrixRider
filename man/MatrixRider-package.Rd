@@ -14,7 +14,7 @@ with a PFM matrix, for example gotten from Jaspar.
 \tabular{ll}{
    Package: \tab MatrixRider\cr
    Type: \tab Package\cr
-   Version: \tab 0.99.0 \cr
+   Version: \tab 0.99.1 \cr
    Date: \tab 2015-23-01\cr
    License: \tab GPL-3\cr
    }

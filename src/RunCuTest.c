@@ -66,7 +66,7 @@ void test_from_counts_to_ll(CuTest *tc)
    toTest->freq[2][1] = 5;
    toTest->freq[2][2] = 5;
    toTest->freq[2][3] = 5;
-   int res = from_counts_to_ll(toTest);
+   from_counts_to_ll(toTest);
    CuAssertDblEquals(tc, toTest->freq[0][0], 0.19047619047619047, EPSILON);
    CuAssertDblEquals(tc, toTest->freq[0][1], 0.23809523809523808, EPSILON);
    CuAssertDblEquals(tc, toTest->freq[0][2], 0.09523809523809523, EPSILON);
@@ -165,11 +165,11 @@ void test_assign_cutoff_occupancy(CuTest *tc)
    toTest->ll[2][3] = 0.25;
    
    double cutoff = 0.5;
-   int res = assign_cutoff_occupancy(toTest, cutoff);
+   assign_cutoff_occupancy(toTest, cutoff);
    CuAssertDblEquals(tc, toTest->cutoff, 0.3026137663344012, EPSILON);
    
    cutoff = 0;
-   res = assign_cutoff_occupancy(toTest, cutoff);
+   assign_cutoff_occupancy(toTest, cutoff);
    CuAssertDblEquals(tc, toTest->cutoff, 0, EPSILON);
 }
 
@@ -264,7 +264,7 @@ CuSuite* MatrixRiderGetSuite() {
 }
  
 int runAllTests() {
-  CuString *output = CuStringNew();
+  //CuString *output = CuStringNew();
   CuSuite* suite = CuSuiteNew();
   CuSuiteAddSuite(suite, MatrixRiderGetSuite());
   CuSuiteRun(suite);
