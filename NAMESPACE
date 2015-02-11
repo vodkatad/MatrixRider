@@ -2,5 +2,7 @@
 exportMethods(getSeqOccupancy)
 useDynLib(MatrixRider)
 import(methods)      
+import(IRanges)
+import(XVector)
 importFrom(TFBSTools, PFMatrix, PFMatrixList)
 importFrom(Biostrings, DNAString)
