@@ -3,13 +3,14 @@
 \alias{MatrixRider}
 \docType{package}
 \title{
-    Calculate total affinity and occupancies for binding site matrices on a given sequence
+    Calculate total affinity and occupancies for binding site matrices on a 
+    given sequence
 }
 \description{
-Calculates a single number for a whole sequence that reflects the propensity of
-    a DNA binding protein to interact with it. The DNA binding protein has to be described
-    with a PFM matrix, for example gotten from Jaspar.
-    }
+Calculates a single number for a whole sequence that reflects the propensity 
+of a DNA binding protein to interact with it. The DNA binding protein has 
+to be described with a PFM matrix, for example gotten from Jaspar.
+}
 \details{
 \tabular{ll}{
 Package:
@@ -17,7 +18,7 @@ Package:
 Type:
     \tab Package\cr
 Version:
-    \tab 0.99.2 \cr
+    \tab 0.99.3 \cr
 Date:
     \tab 2015-11-02\cr
 License:

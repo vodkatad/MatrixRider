@@ -1,7 +1,7 @@
 Package: MatrixRider
 Type: Package
 Title: Obtain total affinity and occupancies for binding site matrices on a given sequence
-Version: 0.99.2
+Version: 0.99.3
 Date: 2015-11-02
 Author: Elena Grassi
 Maintainer: Elena Grassi <grassi.e@gmail.com>
