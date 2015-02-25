@@ -9,7 +9,7 @@
 /* ration, encodedrc and encode_base are really simple. Unit tests will be the last one to be added. */
 /* convert_PFMMatrix_to_matrix_ll has a SEXP parameter, cannot easily test from pure C. Add a standard R test? */
 
-matrix_ll alloc_matrix(int ncol, int nrow)
+matrix_ll alloc_matrix(int ncol)
 {
    matrix_ll to =(matrix_ll) R_alloc(1, sizeof(struct matrix_ll_));
    to->ll = (double **) R_alloc(ncol, sizeof(double *));
@@ -32,7 +32,7 @@ matrix_ll alloc_matrix(int ncol, int nrow)
 void test_from_counts_to_ll(CuTest *tc) 
 {
    int ncol = 3;
-   matrix_ll toTest = alloc_matrix(ncol,BASES);
+   matrix_ll toTest = alloc_matrix(ncol);
    toTest->length = ncol;   
 
    /*double a[5][BASES] = {  
