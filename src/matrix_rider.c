@@ -57,17 +57,17 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
    to->llrc = (double **) R_alloc(ncol, sizeof(double *));
    to->freq = (double **) R_alloc(ncol, sizeof(double *));
    double **cur = NULL;
-	for (cur = to->ll; cur < to->ll + ncol; cur++) {
-			*cur = (double *) R_alloc(NBASES, sizeof(double));
-			
-	}
-	for (cur = to->llrc; cur < to->llrc + ncol; cur++) {
-   		*cur = (double *) R_alloc(NBASES, sizeof(double));		
-	}
+    for (cur = to->ll; cur < to->ll + ncol; cur++) {
+            *cur = (double *) R_alloc(NBASES, sizeof(double));
+            
+    }
+    for (cur = to->llrc; cur < to->llrc + ncol; cur++) {
+           *cur = (double *) R_alloc(NBASES, sizeof(double));        
+    }
    for (cur = to->freq; cur < to->freq + ncol; cur++) {
-      	*cur = (double *) R_alloc(NBASES, sizeof(double));
-			
-	}
+          *cur = (double *) R_alloc(NBASES, sizeof(double));
+            
+    }
    
    if (nrow != BASES) {
       return(MATRIX_DIM_ERROR);
@@ -93,21 +93,21 @@ int from_counts_to_ll(matrix_ll m)
 {
    double tot = 0.0;
    for (int j = 0; j < m->length; j++) {
-		for (int i = 0; i < BASES; i++) {
-			int val = (int)m->freq[j][i];
-			if (val != m->freq[j][i]) {	//then it's not an integer
-				return MATRIX_COUNT_ERROR;
-			}
-			if (m->freq[j][i] <= EEEPSILON) {
-				m->freq[j][i] = 1;
-			}
-			tot += m->freq[j][i];
-		}
-		for (int i = 0; i < BASES; i++) {
-			m->freq[j][i] = m->freq[j][i] / tot;
-		}
-		tot = 0.0;
-	}
+        for (int i = 0; i < BASES; i++) {
+            int val = (int)m->freq[j][i];
+            if (val != m->freq[j][i]) {    //then it's not an integer
+                return MATRIX_COUNT_ERROR;
+            }
+            if (m->freq[j][i] <= EEEPSILON) {
+                m->freq[j][i] = 1;
+            }
+            tot += m->freq[j][i];
+        }
+        for (int i = 0; i < BASES; i++) {
+            m->freq[j][i] = m->freq[j][i] / tot;
+        }
+        tot = 0.0;
+    }
    return OK;
 }
 
@@ -115,20 +115,20 @@ int from_counts_to_ll(matrix_ll m)
 int assign_ll(matrix_ll m, double *bg)
 {
    int j = 0;
-	int i = 0;
+    int i = 0;
    int error = OK;
-	for (; j < m->length; j++) {
-		for (i = 0; i < BASES; i++) {
-			m->ll[j][i] = ratio(m->freq[j][i], bg[i], &error);
-		}
+    for (; j < m->length; j++) {
+        for (i = 0; i < BASES; i++) {
+            m->ll[j][i] = ratio(m->freq[j][i], bg[i], &error);
+        }
       m->ll[j][N] = NN;
-	} 
+    } 
    for (j= 0; j < m->length; j++) {
-   	for (i = 0; i < BASES; i++) {
-			m->llrc[j][i] = m->ll[(m->length) - j - 1][encoded_rc(i)];
-		}
-		m->llrc[j][N] = NN;
-	}
+       for (i = 0; i < BASES; i++) {
+            m->llrc[j][i] = m->ll[(m->length) - j - 1][encoded_rc(i)];
+        }
+        m->llrc[j][N] = NN;
+    }
    
    // DEBUG
    /*for (i = 0; i < m->length; i++) {
@@ -159,23 +159,23 @@ int assign_ll(matrix_ll m, double *bg)
 int assign_cutoff_occupancy(matrix_ll m, double cutoff)
 {
    int j = 0;
-	int i = 0;
-	double max_tot = 1;
-	double max;
-	for (; j < m->length; j++) {
-		max = m->ll[j][0];
-		for (i = 1; i < BASES; i++) {
-			if (m->ll[j][i] > max) {
-				max = m->ll[j][i];
-			}
-		}
-		max_tot *= max;
-	}
+    int i = 0;
+    double max_tot = 1;
+    double max;
+    for (; j < m->length; j++) {
+        max = m->ll[j][0];
+        for (i = 1; i < BASES; i++) {
+            if (m->ll[j][i] > max) {
+                max = m->ll[j][i];
+            }
+        }
+        max_tot *= max;
+    }
 
-	if (cutoff == 0) 
-		m->cutoff = 0; //a^0 = 1 but with 0 we want the same results that with total affinity
-	else
-		m->cutoff = pow(max_tot, cutoff); 	
+    if (cutoff == 0) 
+        m->cutoff = 0; //a^0 = 1 but with 0 we want the same results that with total affinity
+    else
+        m->cutoff = pow(max_tot, cutoff);     
       
    return OK;
 }
@@ -199,79 +199,79 @@ double ratio(double n, double d, int *error)
    // FIXME XXX is this the right error code?
    if (d < EPSILON) {
       *error = BACKGROUND_FREQ_ERROR;
-		return 0;
-	}
-	double ratio = n / d;
-	if (ratio <= 0) {
-   	*error = BACKGROUND_FREQ_ERROR;
-		return 0;
-	}	
-	return ratio;
+        return 0;
+    }
+    double ratio = n / d;
+    if (ratio <= 0) {
+       *error = BACKGROUND_FREQ_ERROR;
+        return 0;
+    }    
+    return ratio;
 }
 
 int encoded_rc(int n)
 {
    switch (n) {
-		case A:
-			return T;
-		case C:
-			return G;
-		case G:
-			return C;
-		case T:
-			return A;
-		case N:
-			return N;
-	}
-	return -1;
+        case A:
+            return T;
+        case C:
+            return G;
+        case G:
+            return C;
+        case T:
+            return A;
+        case N:
+            return N;
+    }
+    return -1;
 }
 
 double matrix_little_window_tot(matrix_ll m, int *seq, int seq_length)
 {
    int offset = 0;
-	double tot = 0;
-	while (offset <= seq_length - m->length) {
-		double match = get_affinity(m, seq, offset);
-		if (match >= m->cutoff) {
-			tot += match;
-		}
-		offset++;
-	}
-	return tot;
+    double tot = 0;
+    while (offset <= seq_length - m->length) {
+        double match = get_affinity(m, seq, offset);
+        if (match >= m->cutoff) {
+            tot += match;
+        }
+        offset++;
+    }
+    return tot;
 }
 
 double get_affinity(matrix_ll m, int *s, int start)
 {
    /* results[0] is straight total, results[1] revcomp */
    int i = 0;
-	double results[2];
-	results[0] = 1;
-	results[1] = 1;
-	while (i < m->length) {
-		results[0] *= m->ll[i][s[start]];
-		results[1] *= m->llrc[i][s[start]]; 
-		i++;
-		start++;
-	}
-	return (results[0] > results[1]) ? results[0] : results[1];
+    double results[2];
+    results[0] = 1;
+    results[1] = 1;
+    while (i < m->length) {
+        results[0] *= m->ll[i][s[start]];
+        results[1] *= m->llrc[i][s[start]]; 
+        i++;
+        start++;
+    }
+    return (results[0] > results[1]) ? results[0] : results[1];
 }
 
 int encode_base(const char c)
 {
    switch (c) {
-		case 'A':
-			return A;
-		case 'C':
-			return C;
-		case 'G':
-			return G;
-		case 'T':
-			return T;
-		case 'N':
-			return N;
-	}
+        case 'A':
+            return A;
+        case 'C':
+            return C;
+        case 'G':
+            return G;
+        case 'T':
+            return T;
+        case 'N':
+            return N;
+    }
    error("Wrong argument to getSeqOccupancy, 'sequence' must be based on a restricted alphabet with only 'A','C','G','T' and 'N'");
-	return -1;
+    return -1;
 }
 
 SEXP run_tests() 

@@ -17,15 +17,15 @@ matrix_ll alloc_matrix(int ncol, int nrow)
    to->freq = (double **) R_alloc(ncol, sizeof(double *));
    double **cur = NULL;
    for (cur = to->ll; cur < to->ll + ncol; cur++) {
-   		*cur = (double *) R_alloc(NBASES, sizeof(double));		
-	}
-	for (cur = to->llrc; cur < to->llrc + ncol; cur++) {
-   		*cur = (double *) R_alloc(NBASES, sizeof(double));		
-	}
+           *cur = (double *) R_alloc(NBASES, sizeof(double));        
+    }
+    for (cur = to->llrc; cur < to->llrc + ncol; cur++) {
+           *cur = (double *) R_alloc(NBASES, sizeof(double));        
+    }
    for (cur = to->freq; cur < to->freq + ncol; cur++) {
-      	*cur = (double *) R_alloc(NBASES, sizeof(double));
-			
-	}
+          *cur = (double *) R_alloc(NBASES, sizeof(double));
+            
+    }
    return(to);
 }
 
@@ -48,11 +48,11 @@ void test_from_counts_to_ll(CuTest *tc)
    to->llrc = (double **) R_alloc(ncol, sizeof(double *));
    double **cur = NULL;
    for (cur = to->ll; cur < to->ll + ncol; cur++) {
-      	*cur = (double *) R_alloc(NBASES, sizeof(double));		
-	}
-	for (cur = to->llrc; cur < to->llrc + ncol; cur++) {
-   		*cur = (double *) R_alloc(NBASES, sizeof(double));		
-	}
+          *cur = (double *) R_alloc(NBASES, sizeof(double));        
+    }
+    for (cur = to->llrc; cur < to->llrc + ncol; cur++) {
+           *cur = (double *) R_alloc(NBASES, sizeof(double));        
+    }
    to->freq = a;*/
    toTest->freq[0][0] = 4;
    toTest->freq[0][1] = 5;
