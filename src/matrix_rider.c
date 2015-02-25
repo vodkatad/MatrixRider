@@ -277,9 +277,8 @@ int encode_base(const char c)
     case 'N':
         return N;
     }
-    error("Wrong argument to getSeqOccupancy, 'sequence' must be \
-            based on a restricted alphabet with only 'A','C','G','T'\
-            and 'N'");
+    error("Wrong argument to getSeqOccupancy, 'sequence' must be based on a\
+    restricted alphabet with only 'A','C','G','T' and 'N'");
     return -1;
 }
 
