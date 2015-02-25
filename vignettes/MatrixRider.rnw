@@ -139,8 +139,8 @@ names(pfms) <- c(name(pfm), name(pfm2))
 getSeqOccupancy(sequence, pfms, 0)
 @
 
-In the examples of the package you can find a simple R script that calculates a
-ffinities for all the Vertebrates
+In the examples of the package you can find a simple R script that calculates
+affinities for all the Vertebrates
 matrixes found in \Biocpkg{JASPAR2014} for a given multifasta file. 
 It is also possible to use manually
 made (i.e. derived from other databases different than Jaspar) matrixes: 
