@@ -65,7 +65,7 @@ contributions from both high- and low-affinity sites~\cite{Tanay2006}.
 
 %The thermodynamic interpretation is not the only one that suggests
 %the relevance of low affinity binding sites: a recent paper~\cite{He2011}
-%showed that, even hypothesising that a few high affinity sites yield the same
+%showed that, even hypothesizing that a few high affinity sites yield the same
 %result at the expression level as a fairly good number of low affinity ones, 
 %genotypes with many low affinity binding sites would have an 
 %``evolutionary advantage'' 
@@ -120,7 +120,7 @@ match for the given matrix (i.e. for MA0004.1 the sequence
 different background distribution values of nucleotides}).
 0 corresponds to the so called ``total affinity'': 
 every affinity value is summed.
-All the other values represents tradeoffs between these two extremes. 
+All the other values represents trade-offs between these two extremes. 
 For more details on the performed calculation see \ref{AppendixA}.
 
 \section{Working with multiple matrixes}
@@ -145,7 +145,7 @@ matrixes found in \Biocpkg{JASPAR2014} for a given multifasta file.
 It is also possible to use manually
 made (i.e. derived from other databases different than Jaspar) matrixes: 
 one simply needs to build a \Rclass{PFMMatrix}
-object with the desidered counts (need to be integer values)
+object with the desired counts (need to be integer values)
 and the background frequencies.
 
 \section{Appendix A}\label{AppendixA}
