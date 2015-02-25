@@ -87,7 +87,7 @@ void test_from_counts_to_ll(CuTest *tc)
 void test_from_counts_to_ll_errorNotInt(CuTest *tc)
 {
     int ncol = 1;
-    matrix_ll toTest = alloc_matrix(ncol,BASES);
+    matrix_ll toTest = alloc_matrix(ncol);
     toTest->length = ncol;
     toTest->freq[0][0] = 0.1;
     toTest->freq[0][1] = 0;
@@ -101,7 +101,7 @@ void test_from_counts_to_ll_errorNotInt(CuTest *tc)
 void test_assign_ll(CuTest *tc)
 {
     int ncol = 3;
-    matrix_ll toTest = alloc_matrix(ncol,BASES);
+    matrix_ll toTest = alloc_matrix(ncol);
     toTest->length = 3;
 
     toTest->freq[0][0] = 0.19047619047619047;
@@ -150,7 +150,7 @@ void test_assign_ll(CuTest *tc)
 void test_assign_cutoff_occupancy(CuTest *tc)
 {
     int ncol = 3;
-    matrix_ll toTest = alloc_matrix(ncol,BASES);
+    matrix_ll toTest = alloc_matrix(ncol);
     toTest->length = 3;
 
     /* We recycle freq values from before for lazyness, 
@@ -180,7 +180,7 @@ void test_assign_cutoff_occupancy(CuTest *tc)
 void test_get_affinity(CuTest *tc)
 {
     int ncol = 2;
-    matrix_ll toTest = alloc_matrix(ncol,BASES);
+    matrix_ll toTest = alloc_matrix(ncol);
     toTest->length = 2;
 
     toTest->ll[0][0] = 0.19047619047619047;
@@ -211,7 +211,7 @@ void test_get_affinity(CuTest *tc)
 void test_matrix_little_window_tot(CuTest *tc)
 {
     int ncol = 2;
-    matrix_ll toTest = alloc_matrix(ncol,BASES);
+    matrix_ll toTest = alloc_matrix(ncol);
     toTest->length = 2;
 
     toTest->ll[0][0] = 0.19047619047619047;
