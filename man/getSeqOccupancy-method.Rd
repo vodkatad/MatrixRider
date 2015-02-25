@@ -23,16 +23,17 @@
     to perform affinity calculations.
     }
     \item{cutoff}{
-    Has to be between 0 and 1 (included): 0 corresponds to total affinity 
-    (i.e. summing all the affinites) while 1 to
+    numeric(1); between 0 and 1 (included): 0 corresponds to total affinity 
+    (i.e. summing all the affinities) while 1 to
     summing only values corresponding to the perfect match 
     for a given \linkS4class{PFMatrix}.
-    The vignette has more details on how scores are calculated. 
-    %howtolink vignette?
+    "See vignette for details on how scores are calculated. If
+    \pkg{MatrixRider} is installed, open the vignette with
+    \code{vignette("MatrixRider")} 
     }
 }
 \value{
-The resulting total affinity calculated on the given fasta.
+numeric; the resulting total affinity calculated on the given fasta.
 If a \linkS4class{PFMatrixList} has been passed then a named 
 numeric vector with the affinities for all the PFMs.
 The vignette has all the details on the calculations 

@@ -11,20 +11,6 @@ Calculates a single number for a whole sequence that reflects the propensity
 of a DNA binding protein to interact with it. The DNA binding protein has 
 to be described with a PFM matrix, for example gotten from Jaspar.
 }
-\details{
-\tabular{ll}{
-Package:
-    \tab MatrixRider\cr
-Type:
-    \tab Package\cr
-Version:
-    \tab 0.99.3 \cr
-Date:
-    \tab 2015-11-02\cr
-License:
-    \tab GPL-3\cr
-}
-}
 
 \author{
 Elena Grassi <elena.grassi@unito.it>
