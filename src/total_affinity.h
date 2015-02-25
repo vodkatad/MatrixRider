@@ -7,7 +7,7 @@
 // Free Software Foundation; either version 2, or (at your option) any later
 // version.
 //
-// This program is distributed in the hope that it will be useful, but 
+// This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTIBILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 // for more details.
@@ -15,7 +15,7 @@
 
 /*
     Constants: TODO finish commenting
-    
+
     BASES - n. of bases, used to load correctly log likelood ratios.
     ERROR - constant used to return an error status, evaluates true (1).
     OK - constant used to return without error from a function, evaluates false (0).
@@ -24,8 +24,8 @@
     G - constant used to represent DNA base.
     T - constant used to represent DNA base.
     N - constant used to assign 0 to N when evaluating matches.
-    EPSILON 0.001 - constant used for double equalities evaluation. 
-    EEEPSILON 0.0000000001 - smaller constant used for double equalities evaluation. 
+    EPSILON 0.001 - constant used for double equalities evaluation.
+    EEEPSILON 0.0000000001 - smaller constant used for double equalities evaluation.
 
 */
 #define BASES 4
@@ -37,8 +37,8 @@
 #define T 3
 #define N 4
 #define NN 0
-#define EPSILON 0.001 
-#define EEEPSILON 0.0000000001 
+#define EPSILON 0.001
+#define EEEPSILON 0.0000000001
 
 #define MATRIX_DIM_ERROR 1
 #define MATRIX_COUNT_ERROR 2
@@ -46,22 +46,22 @@
 
 /*#define DEBUG
 #define NDEBUG */
- 
+
 #ifndef __TOTAL_AFFINITY_H__
 #define __TOTAL_AFFINITY_H__
 
 /*
-    Struct: matrix_ll is a pointer to a struct used to store info on matrixes. 
+    Struct: matrix_ll is a pointer to a struct used to store info on matrixes.
 */
 typedef struct matrix_ll_ *matrix_ll;
 
 struct matrix_ll_ {
-	double **ll;
-	double **llrc;
-   double **freq;
-   double cutoff;
-	int length;
-	//char *name;
+    double **ll;
+    double **llrc;
+    double **freq;
+    double cutoff;
+    int length;
+    //char *name;
 };
 
 
