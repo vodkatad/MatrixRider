@@ -6,8 +6,10 @@
 #include "CuTest.h"
 #include "total_affinity.h"
 
-/* ration, encodedrc and encode_base are really simple. Unit tests will be the last one to be added. */
-/* convert_PFMMatrix_to_matrix_ll has a SEXP parameter, cannot easily test from pure C. Add a standard R test? */
+/* ration, encodedrc and encode_base are really simple.
+Unit tests will be the last one to be added. */
+/* convert_PFMMatrix_to_matrix_ll has a SEXP parameter, 
+cannot easily test from pure C. Add a standard R test? */
 
 matrix_ll alloc_matrix(int ncol)
 {
@@ -136,7 +138,8 @@ void test_assign_ll(CuTest *tc)
     CuAssertDblEquals(tc, toTest->ll[2][2], 0.5, EPSILON);
     CuAssertDblEquals(tc, toTest->ll[2][3], 0.833333333, EPSILON);
     CuAssertDblEquals(tc, toTest->ll[2][4], NN, EPSILON);
-    CuAssertDblEquals(tc, toTest->llrc[2][3], 1.9047619047619047, EPSILON); // Add some more? XXX
+    CuAssertDblEquals(tc, toTest->llrc[2][3], 1.9047619047619047, EPSILON); 
+    // Add some more? XXX
 
     /* We test a ratio error here. */
     bg[3] = 0;
@@ -150,7 +153,8 @@ void test_assign_cutoff_occupancy(CuTest *tc)
     matrix_ll toTest = alloc_matrix(ncol,BASES);
     toTest->length = 3;
 
-    /* We recycle freq values from before for lazyness, for the test's sake it's the same.*/
+    /* We recycle freq values from before for lazyness, 
+    for the test's sake it's the same.*/
     toTest->ll[0][0] = 0.19047619047619047;
     toTest->ll[0][1] = 0.23809523809523808;
     toTest->ll[0][2] = 0.09523809523809523;
@@ -245,7 +249,8 @@ void test_matrix_little_window_tot(CuTest *tc)
     seq[3] = T;
     res = matrix_little_window_tot(toTest, seq, 4);
     CuAssertDblEquals(tc, res, 0.29304029304029305, EPSILON);
-    // Maybe add a more complex case with an affinity that will be summed not only from AA.
+    /* Maybe add a more complex case with an affinity 
+    that will be summed not only from AA.*/
 
 }
 

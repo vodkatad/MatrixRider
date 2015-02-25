@@ -18,14 +18,14 @@
 
     BASES - n. of bases, used to load correctly log likelood ratios.
     ERROR - constant used to return an error status, evaluates true (1).
-    OK - constant used to return without error from a function, evaluates false (0).
+    OK - constant used to return without error, evaluates false (0).
     A - constant used to represent DNA base.
     C - constant used to represent DNA base.
     G - constant used to represent DNA base.
     T - constant used to represent DNA base.
     N - constant used to assign 0 to N when evaluating matches.
     EPSILON 0.001 - constant used for double equalities evaluation.
-    EEEPSILON 0.0000000001 - smaller constant used for double equalities evaluation.
+    EEEPSILON 0.0000000001 - smaller constant.
 
 */
 #define BASES 4

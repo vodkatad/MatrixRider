@@ -18,7 +18,8 @@ SEXP get_occupancy(SEXP pfm, SEXP cutoff, SEXP sequence)
     SEXP mat = GET_SLOT(pfm, install("profileMatrix"));
     matrix_ll mat_ll = NULL;
     if (convert_PFMMatrix_to_matrix_ll(mat, &mat_ll)) {
-        error("Error while converting PFMMatrix to PWM: not integer counts or wrong dimensions");
+        error("Error while converting PFMMatrix to PWM: \
+                not integer counts or wrong dimensions");
     }
     if (assign_ll(mat_ll, bg_c)) {
         error("Error while assigning (log)-likelihoods: 0 bg?");
@@ -74,8 +75,10 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
     }
     to->length = ncol;
 
-    // We have four rows (index j) and "matrix length" columns (index i) in SEXP from
-    // and we have a reversed structure in matrix_ll to with a row foreach matrix element with 4 numbers.
+    // We have four rows (index j) and "matrix length" 
+    // columns (index i) in SEXP from
+    // and we have a reversed structure in matrix_ll to
+    // with a row foreach matrix element with 4 numbers.
     // That's not true the matrix seems to be already reversed in memory?
     // Are stored as: first column / then second column etc etc
     for (int j = 0; j < ncol; j++) {
@@ -85,7 +88,8 @@ int convert_PFMMatrix_to_matrix_ll(SEXP from, matrix_ll *toptr)
     }
 
     return(from_counts_to_ll(to));
-    // XXX Reason about using ll calculations different from ours (like TFBSTools): accept PWMMatrix?
+    // XXX Reason about using ll calculations different
+    // from ours (like TFBSTools): accept PWMMatrix?
 }
 
 
@@ -96,7 +100,8 @@ int from_counts_to_ll(matrix_ll m)
         for (int i = 0; i < BASES; i++) {
             int val = (int)m->freq[j][i];
             if (val != m->freq[j][i]) {    //then it's not an integer
-                return MATRIX_COUNT_ERROR;
+
+return MATRIX_COUNT_ERROR;
             }
             if (m->freq[j][i] <= EEEPSILON) {
                 m->freq[j][i] = 1;
@@ -154,7 +159,8 @@ int assign_ll(matrix_ll m, double *bg)
 
     Parameters:
         m - matrix_ll with ll loaded and missing cutoff.
-        cutoff - the cutoff under which single position affinities will not be considered.
+        cutoff - the cutoff under which single position 
+                    affinities will not be considered.
 */
 int assign_cutoff_occupancy(matrix_ll m, double cutoff)
 {
@@ -172,8 +178,9 @@ int assign_cutoff_occupancy(matrix_ll m, double cutoff)
         max_tot *= max;
     }
 
+    //a^0 = 1 but with 0 we want the same results that with total affinity
     if (cutoff == 0)
-        m->cutoff = 0; //a^0 = 1 but with 0 we want the same results that with total affinity
+        m->cutoff = 0; 
     else
         m->cutoff = pow(max_tot, cutoff);
 
@@ -270,7 +277,9 @@ int encode_base(const char c)
     case 'N':
         return N;
     }
-    error("Wrong argument to getSeqOccupancy, 'sequence' must be based on a restricted alphabet with only 'A','C','G','T' and 'N'");
+    error("Wrong argument to getSeqOccupancy, 'sequence' must be \
+            based on a restricted alphabet with only 'A','C','G','T'\
+            and 'N'");
     return -1;
 }
 
