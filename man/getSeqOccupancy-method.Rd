@@ -27,9 +27,9 @@
     (i.e. summing all the affinities) while 1 to
     summing only values corresponding to the perfect match 
     for a given \linkS4class{PFMatrix}.
-    "See vignette for details on how scores are calculated. If
+    See vignette for details on how scores are calculated. If
     \pkg{MatrixRider} is installed, open the vignette with
-    \code{vignette("MatrixRider")} 
+    \code{vignette("MatrixRider")}.
     }
 }
 \value{
