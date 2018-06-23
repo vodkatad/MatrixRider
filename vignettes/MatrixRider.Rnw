@@ -152,9 +152,9 @@ and the background frequencies.
 Total affinity is defined as in~\cite{Molineris2011}: 
 $a_{rw}$ of a PWM $w$ for a sequence $r$ is given by:
 $$
-a_{rw} = \log \sum_{i=1}^{L-l} \max\left( \prod_{j=1}^l
-\frac{P(w_j,r_{i+j})}{P(b,r_{i+j})}, \prod_{j=1}^l
-\frac{P(w_{l-j+1},r'_{i+j})}{P(b,r_{i+j})} \right)
+a_{rw} = \log \sum_{i=1}^{L-l+1} \max\left( \prod_{j=1}^l
+\frac{P(w_j,r_{i+j-1})}{P(b,r_{i+j-1})}, \prod_{j=1}^l
+\frac{P(w_{l-j+1},r'_{i+j-1})}{P(b,r'_{i+j-1})} \right)
 $$
 where $l$ is the length of the PWM $w$, $L$ is the length of the
 sequence $r$, $r_i$ is the nucleotide at the position $i$ of the
@@ -180,10 +180,10 @@ in the PWM at position $j$. \\This corresponds to
 
 $$
 \max\left( \prod_{j=1}^l
-\frac{P(w_j,r_{i+j})}{P(b,r_{i+j})}, \prod_{j=1}^l
-\frac{P(w_{l-j+1},r'_{i+j})}{P(b,r_{i+j})} \right) 
+\frac{P(w_j,r_{i+j-1})}{P(b,r_{i+j-1})}, \prod_{j=1}^l
+\frac{P(w_{l-j+1},r'_{i+j-1})}{P(b,r'_{i+j-1})} \right) 
 \geq  \prod_{j=1}^l
-\left(\frac{P(w_{jPWM},r_{i+j})}{P(b,r_{i+j})}\right)^c
+\left(\frac{P(w_{jPWM},r_{i+j-1})}{P(b,r_{i+j-1})}\right)^c
 $$
 assuming that we are working on the subsequence of $r$ that begins 
 at position $i$.
@@ -192,9 +192,9 @@ We will refer to this disequality as $PWM_c(c, w, r, i)$ from now on.
 Thus we define the total occupancy $t_{rwc}$ of a PWM $w$ for a sequence $r$
 and cutoff $c$ with $ 0 \leq c \leq 1$ as:
 $$
-t_{rwc} = \sum_{i=1}^{L-l} \max\left( \prod_{j=1}^l
-\frac{P(w_j,r_{i+j})}{P(b,r_{i+j})}, \prod_{j=1}^l
-\frac{P(w_{l-j+1},r'_{i+j})}{P(b,r_{i+j})} \right) \times \phi(c, w, r, i)
+t_{rwc} = \sum_{i=1}^{L-l+1} \max\left( \prod_{j=1}^l
+\frac{P(w_j,r_{i+j-1})}{P(b,r_{i+j-1})}, \prod_{j=1}^l
+\frac{P(w_{l-j+1},r'_{i+j-1})}{P(b,r'_{i+j-1})} \right) \times \phi(c, w, r, i)
 $$
 
 with the $\phi$ function defined as:
